@@ -3,6 +3,7 @@ export default interface Article {
     attributes: {
       title: string;
       description: string;
+      image: string;
       content: string;
       slug: string;
       createdAt: string;
