@@ -31,7 +31,27 @@ export default defineConfig({
       {
         name: "post",
         label: "Posts",
-        path: "content/posts",
+        path: "src/content/post",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            type: "rich-text",
+            name: "body",
+            label: "Body",
+            isBody: true,
+          },
+        ],
+      },
+      {
+        name: "alimento",
+        label: "alimentos",
+        path: "src/content/alimento",
         fields: [
           {
             type: "string",
