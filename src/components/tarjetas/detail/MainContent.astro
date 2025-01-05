@@ -1,4 +1,5 @@
 ---
+import { marked } from 'marked';
 import type { TarjetaCredito } from '../../../types/contentful';
 
 interface Props {
@@ -6,29 +7,30 @@ interface Props {
 }
 
 const { tarjeta } = Astro.props;
+const requisitosHtml = marked(tarjeta.requisitos);
 ---
 
 <div class="space-y-6">
+  <!-- Categorías -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Categorías</h2>
+    <div class="flex flex-wrap gap-2">
+      {tarjeta.categoria.map((cat) => (
+        <span class="px-3 py-1 bg-lime-50 text-lime-700 rounded-full text-sm font-medium">
+          {cat}
+        </span>
+      ))}
+    </div>
+  </div>
 
   <!-- Requisitos -->
   <div class="bg-white rounded-lg shadow-md p-6">
     <h2 class="text-xl font-semibold text-gray-900 mb-4">Requisitos</h2>
-    <div class="prose max-w-none text-gray-600">
-      {tarjeta.requisitos}
-    </div>
+    <div 
+      class="prose prose-gray max-w-none prose-headings:text-gray-900 prose-headings:font-semibold prose-p:text-gray-600 prose-li:text-gray-600 prose-strong:text-gray-900"
+      set:html={requisitosHtml}
+    />
   </div>
-
-    <!-- Categorías -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Categorías</h2>
-        <div class="flex flex-wrap gap-2">
-          {tarjeta.categoria.map((cat) => (
-            <span class="px-3 py-1 bg-lime-50 text-lime-700 rounded-full text-sm font-medium">
-              {cat}
-            </span>
-          ))}
-        </div>
-      </div>
 
   <!-- Información del Banco -->
   <div class="bg-white rounded-lg shadow-md p-6">
@@ -37,8 +39,9 @@ const { tarjeta } = Astro.props;
       <img 
         src={tarjeta.entidadBancaria.logoBanco.url} 
         alt={tarjeta.entidadBancaria.logoBanco.title}
-        class="h-5 object-contain"
+        class="h-8 object-contain"
       />
+      <span class="text-gray-900 font-medium">{tarjeta.entidadBancaria.nombreBanco}</span>
     </div>
   </div>
 </div>
