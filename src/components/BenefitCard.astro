@@ -1,0 +1,30 @@
+---
+import type { Benefit } from '../lib/contentful/types';
+
+interface Props {
+  benefit: Benefit;
+}
+
+const { benefit } = Astro.props;
+const { nombreBeneficio, imagenBeneficio, detalleBeneficio } = benefit.fields;
+---
+
+<div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
+  <div class="flex items-start space-x-4">
+    <div class="flex-shrink-0">
+      <img
+        src={imagenBeneficio.fields.file.url}
+        alt={imagenBeneficio.fields.title || nombreBeneficio}
+        class="w-12 h-12 object-contain"
+      />
+    </div>
+    <div>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">
+        {nombreBeneficio}
+      </h3>
+      <p class="text-gray-600 text-sm whitespace-pre-line">
+        {detalleBeneficio}
+      </p>
+    </div>
+  </div>
+</div>

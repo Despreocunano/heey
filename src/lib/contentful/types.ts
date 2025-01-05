@@ -1,37 +1,38 @@
-import type { Entry, EntrySkeletonType } from 'contentful';
+import type { Entry, EntrySkeletonType, Asset } from 'contentful';
 
-// Define los campos de entidad bancaria
-export interface BankEntityFields {
-  nombre: string;
-  slug: string; // Campo necesario para las consultas
+export interface BankFields {
+  nombreBanco: string;
+  slug: string;
 }
 
-// Define la estructura compatible
-export interface BankEntitySkeleton extends EntrySkeletonType<BankEntityFields> {
-  contentTypeId: 'entidadBancaria';
+export interface BankSkeleton extends EntrySkeletonType<BankFields> {
+  contentTypeId: 'bancos';
 }
 
-// Define BankEntity como Entry basado en BankEntitySkeleton
-export type BankEntity = Entry<BankEntitySkeleton>;
+export type Bank = Entry<BankSkeleton>;
 
-// Define los campos de Benefit
+// Updated Benefit fields to match the API response
 export interface BenefitFields {
-  nombre: string;
-  descripcion: string;
+  nombreBeneficio: string;
+  imagenBeneficio: Asset;
+  detalleBeneficio: string;
 }
 
 export interface BenefitSkeleton extends EntrySkeletonType<BenefitFields> {
-  contentTypeId: 'beneficio';
+  contentTypeId: 'beneficios';
 }
 
 export type Benefit = Entry<BenefitSkeleton>;
 
-// Define CreditCard con su estructura compatible
 export interface CreditCardFields {
   nombre: string;
   slug: string;
-  entidadBancaria: BankEntity; // Referencia a otra entrada
-  beneficios: Benefit[]; // Referencia a un arreglo de beneficios
+  entidadBancaria: Bank;
+  mantencion: string;
+  renta: number;
+  comisionInternacional?: string;
+  requisitos: string;
+  beneficios: Benefit[];
 }
 
 export interface CreditCardSkeleton extends EntrySkeletonType<CreditCardFields> {

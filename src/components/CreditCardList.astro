@@ -1,9 +1,8 @@
 ---
-import type { Entry } from 'contentful';
 import type { CreditCard } from '../lib/contentful/types';
 
 interface Props {
-  cards: Entry<CreditCard>[];
+  cards: CreditCard[];
 }
 
 const { cards } = Astro.props;
@@ -21,10 +20,13 @@ const { cards } = Astro.props;
             {card.fields.nombre}
           </h2>
           <p class="text-gray-600 mb-4">
-            Banco: {card.fields.entidadBancaria?.fields?.nombreBanco || 'No especificado'}
+            Banco: {card.fields.entidadBancaria.fields.nombreBanco}
           </p>
           <div class="text-sm text-gray-500">
             {card.fields.beneficios.length} beneficios disponibles
+          </div>
+          <div class="mt-2 text-sm text-gray-500">
+            Mantención: {card.fields.mantencion}
           </div>
         </div>
       </a>

@@ -1,22 +1,19 @@
 ---
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-import { getCreditCards, getCreditCardBySlug } from '../lib/contentful/queries/creditCard';
+import { getCreditCards } from '../lib/contentful/queries/creditCard';
 import CreditCardList from '../components/CreditCardList.astro';
 
 // Get all credit cards
 const cards = await getCreditCards();
-
-// Get a specific card by slug
-const card = await getCreditCardBySlug('my-card-slug');
-
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
-	<CreditCardList cards={cards} />
-
+  <main class="container mx-auto px-4 py-8">
+    <Welcome />
+    <div class="mt-12">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Tarjetas Disponibles</h2>
+      <CreditCardList cards={cards} />
+    </div>
+  </main>
 </Layout>
