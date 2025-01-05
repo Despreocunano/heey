@@ -29,6 +29,9 @@ export interface TarjetaCredito {
       url: string;
       title: string;
     };
+    emergencias?: string;
+    emergenciasInternacionales?: string;
+    whatsapp?: string;
     slug: string;
   };
   mantencion: string;

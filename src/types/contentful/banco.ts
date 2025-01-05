@@ -5,6 +5,9 @@ import type { Asset, BaseEntry } from './base';
 export interface IBancoFields {
   nombreBanco: EntryFields.Symbol;
   logoBanco: Asset;
+  emergencias?: EntryFields.Symbol;
+  emergenciasInternacionales?: EntryFields.Symbol;
+  whatsapp?: EntryFields.Symbol;
   slug: EntryFields.Symbol;
 }
 
@@ -18,5 +21,8 @@ export interface Banco {
     url: string;
     title: string;
   };
+  emergencias?: string;
+  emergenciasInternacionales?: string;
+  whatsapp?: string;
   slug: string;
 }
