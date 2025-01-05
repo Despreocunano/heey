@@ -8,12 +8,13 @@ interface Props {
 const { benefit } = Astro.props;
 const { nombreBeneficio, imagenBeneficio, detalleBeneficio } = benefit.fields;
 
-// Add fallback for image URL and title
+// Add fallback for image URL
 const imageUrl = imagenBeneficio?.fields?.file?.url 
   ? `https:${imagenBeneficio.fields.file.url}`
   : '/placeholder-image.svg';
 
-const imageAlt = imagenBeneficio?.fields?.title || nombreBeneficio;
+// Use image description as alt text, fallback to benefit name if no description
+const imageAlt = imagenBeneficio?.fields?.description || nombreBeneficio;
 ---
 
 <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
