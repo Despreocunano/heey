@@ -10,21 +10,16 @@ const { tarjeta } = Astro.props;
 
 <header class="sticky top-0 z-50 bg-white border-b border-gray-200 mb-6">
   <div class="max-w-6xl mx-auto px-4 py-4">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-4">
+    <div class="flex lg:flex-row lg:items-center justify-between gap-4">
+      <div class="flex flex-col lg:items-center gap-4">
         <h1 class="text-2xl font-bold text-gray-900">{tarjeta.nombre}</h1>
-        <img 
-        src={tarjeta.entidadBancaria.logoBanco.url} 
-        alt={tarjeta.entidadBancaria.logoBanco.title}
-        class="h-4 object-contain"
-      />
       </div>
       <div class="flex gap-2">
-        {tarjeta.marca.map((marca) => (
-          <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
-            {marca}
-          </span>
-        ))}
+        <img 
+          src={tarjeta.entidadBancaria.logoBanco.url} 
+          alt={tarjeta.entidadBancaria.logoBanco.title}
+          class="h-5 object-contain"
+        />
       </div>
     </div>
   </div>
