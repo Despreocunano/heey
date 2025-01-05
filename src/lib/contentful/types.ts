@@ -26,6 +26,7 @@ export interface Asset extends ContentfulAsset {
 
 export interface BankFields {
   nombreBanco: string;
+  logoBanco: Asset;
   slug: string;
 }
 
