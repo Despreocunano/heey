@@ -14,6 +14,7 @@ export interface ITarjetaCreditoFields {
   categoria: EntryFields.Symbol[];
   beneficios: BaseEntry<any>[];
   imagenTarjeta: Asset;
+  url: EntryFields.Symbol;
   slug: EntryFields.Symbol;
 }
 
@@ -45,5 +46,6 @@ export interface TarjetaCredito {
     url: string;
     title: string;
   };
+  url: string;
   slug: string;
 }

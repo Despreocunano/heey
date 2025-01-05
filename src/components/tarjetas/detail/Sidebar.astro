@@ -38,8 +38,13 @@ const { tarjeta, mobile } = Astro.props;
         </div>
       )}
     </div>
-    <button class="w-full bg-lime-600 hover:bg-lime-700 text-white font-semibold py-4 px-6 rounded-lg transition-colors">
+    <a 
+      href={tarjeta.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="block w-full bg-lime-600 hover:bg-lime-700 text-white font-semibold py-4 px-6 rounded-lg transition-colors text-center"
+    >
       Solicitar Tarjeta
-    </button>
+    </a>
   </div>
 </div>
