@@ -18,6 +18,7 @@ const { tarjeta } = Astro.props;
         src={tarjeta.imagenTarjeta.url} 
         alt={tarjeta.imagenTarjeta.title}
         class="w-full h-40 object-contain transform group-hover:scale-105 transition-transform duration-300"
+        transition:name={`tarjeta-${tarjeta.slug}`}
       />
     </div>
     
@@ -69,14 +70,3 @@ const { tarjeta } = Astro.props;
     </div>
   </div>
 </a>
-
-<style is:inline>
-/* Ocultar scrollbar */
-.scrollbar-hide {
-  -ms-overflow-style: none; /* IE y Edge */
-  scrollbar-width: none; /* Firefox */
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari y Opera */
-}
-</style>

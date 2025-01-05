@@ -20,6 +20,7 @@ const { tarjeta, mobile } = Astro.props;
         "w-full object-contain mb-6",
         mobile ? "h-56" : "h-48"
       ]}
+      transition:name={`tarjeta-${tarjeta.slug}`}
     />
     <div class="space-y-4 mb-6">
       <div class="flex justify-between items-center">
