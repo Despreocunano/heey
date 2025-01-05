@@ -7,16 +7,24 @@ interface Props {
 
 const { benefit } = Astro.props;
 const { nombreBeneficio, imagenBeneficio, detalleBeneficio } = benefit.fields;
+
+// Add fallback for image URL
+const imageUrl = imagenBeneficio?.fields?.file?.url 
+  ? `https:${imagenBeneficio.fields.file.url}`
+  : '/placeholder-image.svg';
 ---
 
 <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
   <div class="flex items-start space-x-4">
     <div class="flex-shrink-0">
-      <img
-        src={imagenBeneficio.fields.file.url}
-        alt={imagenBeneficio.fields.title || nombreBeneficio}
-        class="w-12 h-12 object-contain"
-      />
+      {imagenBeneficio && (
+        <img
+          src={imageUrl}
+          alt={imagenBeneficio.fields.title || nombreBeneficio}
+          class="w-12 h-12 object-contain"
+          loading="lazy"
+        />
+      )}
     </div>
     <div>
       <h3 class="text-lg font-semibold text-gray-900 mb-2">

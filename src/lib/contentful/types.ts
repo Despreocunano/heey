@@ -1,4 +1,28 @@
-import type { Entry, EntrySkeletonType, Asset } from 'contentful';
+import type { Entry, EntrySkeletonType, Asset as ContentfulAsset } from 'contentful';
+
+// Define Asset type explicitly
+export interface AssetFile {
+  url: string;
+  details: {
+    size: number;
+    image?: {
+      width: number;
+      height: number;
+    };
+  };
+  fileName: string;
+  contentType: string;
+}
+
+export interface AssetFields {
+  title: string;
+  description: string;
+  file: AssetFile;
+}
+
+export interface Asset extends ContentfulAsset {
+  fields: AssetFields;
+}
 
 export interface BankFields {
   nombreBanco: string;
@@ -11,7 +35,6 @@ export interface BankSkeleton extends EntrySkeletonType<BankFields> {
 
 export type Bank = Entry<BankSkeleton>;
 
-// Updated Benefit fields to match the API response
 export interface BenefitFields {
   nombreBeneficio: string;
   imagenBeneficio: Asset;
