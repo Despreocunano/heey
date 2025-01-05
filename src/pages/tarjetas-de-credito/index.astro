@@ -1,0 +1,20 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import TarjetaCard from '../../components/tarjetas/TarjetaCard.astro';
+import TarjetaWelcome from '../../components/tarjetas/TarjetaWelcome.astro';
+import { getTarjetas } from '../../lib/contentful';
+
+const tarjetas = await getTarjetas();
+---
+
+<Layout>
+  <TarjetaWelcome />
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Tarjetas de Crédito</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {tarjetas.map((tarjeta) => (
+        <TarjetaCard tarjeta={tarjeta} />
+      ))}
+    </div>
+  </main>
+</Layout>
