@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import TarjetaDetail from '../../components/tarjetas/TarjetaDetail.astro';
-import { getTarjetas, getTarjetaBySlug } from '../../lib/contentful/';
+import { getTarjetas } from '../../lib/contentful/';
 
 export async function getStaticPaths() {
   const tarjetas = await getTarjetas();

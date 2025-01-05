@@ -1,0 +1,44 @@
+---
+import type { TarjetaCredito } from '../../../types/contentful';
+
+interface Props {
+  tarjeta: TarjetaCredito;
+}
+
+const { tarjeta } = Astro.props;
+---
+
+<div class="space-y-6">
+  <!-- Categorías -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Categorías</h2>
+    <div class="flex flex-wrap gap-2">
+      {tarjeta.categoria.map((cat) => (
+        <span class="px-3 py-1 bg-lime-50 text-lime-700 rounded-full text-sm font-medium">
+          {cat}
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <!-- Requisitos -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Requisitos</h2>
+    <div class="prose max-w-none text-gray-600">
+      {tarjeta.requisitos}
+    </div>
+  </div>
+
+  <!-- Información del Banco -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Información del Banco</h2>
+    <div class="flex items-center gap-3">
+      <img 
+        src={tarjeta.entidadBancaria.logoBanco.url} 
+        alt={tarjeta.entidadBancaria.logoBanco.title}
+        class="h-8 object-contain"
+      />
+      <span class="text-gray-900 font-medium">{tarjeta.entidadBancaria.nombreBanco}</span>
+    </div>
+  </div>
+</div>

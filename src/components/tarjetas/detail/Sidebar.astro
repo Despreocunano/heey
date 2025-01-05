@@ -1,0 +1,44 @@
+---
+import type { TarjetaCredito } from '../../../types/contentful';
+
+interface Props {
+  tarjeta: TarjetaCredito;
+  mobile: boolean;
+}
+
+const { tarjeta, mobile } = Astro.props;
+---
+
+<div class:list={[
+  { "sticky top-28": !mobile }
+]}>
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <img 
+      src={tarjeta.imagenTarjeta.url} 
+      alt={tarjeta.imagenTarjeta.title}
+      class:list={[
+        "w-full object-contain mb-6",
+        mobile ? "h-56" : "h-48"
+      ]}
+    />
+    <div class="space-y-4 mb-6">
+      <div class="flex justify-between items-center">
+        <span class="text-gray-600">Mantención</span>
+        <span class="font-medium">{tarjeta.mantencion}</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-600">Renta Mínima</span>
+        <span class="font-medium">${tarjeta.renta.toLocaleString('es-CL')}</span>
+      </div>
+      {tarjeta.comisionInternacional && (
+        <div class="flex justify-between items-center">
+          <span class="text-gray-600">Comisión Internacional</span>
+          <span class="font-medium">{tarjeta.comisionInternacional}</span>
+        </div>
+      )}
+    </div>
+    <button class="w-full bg-lime-600 hover:bg-lime-700 text-white font-semibold py-4 px-6 rounded-lg transition-colors">
+      Solicitar Tarjeta
+    </button>
+  </div>
+</div>

@@ -1,5 +1,8 @@
 ---
 import type { TarjetaCredito } from '../../types/contentful';
+import Header from './detail/Header.astro';
+import Sidebar from './detail/Sidebar.astro';
+import MainContent from './detail/MainContent.astro';
 
 interface Props {
   tarjeta: TarjetaCredito;
@@ -8,73 +11,25 @@ interface Props {
 const { tarjeta } = Astro.props;
 ---
 
-<div class="bg-white rounded-lg shadow-md p-6">
-  <div class="flex items-center gap-4 mb-6">
-    <img 
-      src={tarjeta.entidadBancaria.logoBanco.url} 
-      alt={tarjeta.entidadBancaria.logoBanco.title}
-      class="h-8 object-contain"
-    />
-    <h1 class="text-3xl font-bold">{tarjeta.nombre}</h1>
-  </div>
-
-  <img 
-    src={tarjeta.imagenTarjeta.url} 
-    alt={tarjeta.imagenTarjeta.title}
-    class="w-full max-w-md mx-auto h-64 object-contain mb-8"
-  />
-
-  <div class="grid md:grid-cols-2 gap-6">
-    <div>
-      <h2 class="text-xl font-semibold mb-4">Información General</h2>
-      <dl class="space-y-2">
-        <dt class="font-medium">Mantención</dt>
-        <dd>{tarjeta.mantencion}</dd>
-        
-        <dt class="font-medium">Renta Mínima</dt>
-        <dd>${tarjeta.renta.toLocaleString('es-CL')}</dd>
-        
-        {tarjeta.comisionInternacional && (
-          <>
-            <dt class="font-medium">Comisión Internacional</dt>
-            <dd>{tarjeta.comisionInternacional}</dd>
-          </>
-        )}
-      </dl>
+<div class="min-h-screen bg-gray-50">
+  <Header tarjeta={tarjeta} />
+  
+  <div class="max-w-6xl mx-auto px-4 py-6">
+    <!-- Sidebar en móvil -->
+    <div class="lg:hidden mb-6">
+      <Sidebar tarjeta={tarjeta} mobile={true} />
     </div>
 
-    <div>
-      <h2 class="text-xl font-semibold mb-4">Características</h2>
-      <div class="space-y-4">
-        <div>
-          <h3 class="font-medium">Marcas</h3>
-          <div class="flex gap-2 mt-1">
-            {tarjeta.marca.map((marca) => (
-              <span class="px-2 py-1 bg-gray-100 rounded-full text-sm">
-                {marca}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <h3 class="font-medium">Categorías</h3>
-          <div class="flex flex-wrap gap-2 mt-1">
-            {tarjeta.categoria.map((cat) => (
-              <span class="px-2 py-1 bg-gray-100 rounded-full text-sm">
-                {cat}
-              </span>
-            ))}
-          </div>
-        </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Main Content -->
+      <div class="lg:col-span-2">
+        <MainContent tarjeta={tarjeta} />
       </div>
-    </div>
-  </div>
-
-  <div class="mt-8">
-    <h2 class="text-xl font-semibold mb-4">Requisitos</h2>
-    <div class="prose max-w-none">
-      {tarjeta.requisitos}
+      
+      <!-- Sidebar en desktop -->
+      <div class="hidden lg:block lg:col-span-1">
+        <Sidebar tarjeta={tarjeta} mobile={false} />
+      </div>
     </div>
   </div>
 </div>
