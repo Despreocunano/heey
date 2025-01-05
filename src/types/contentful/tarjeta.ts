@@ -1,10 +1,12 @@
 import type { EntryFields } from 'contentful';
 import type { Asset, BaseEntry } from './base';
 import type { IBanco } from './banco';
+import type { IBeneficio } from './beneficio';
 
 // Contentful Entry Fields
 export interface ITarjetaCreditoFields {
   nombre: EntryFields.Symbol;
+  imagenTarjeta: Asset;
   entidadBancaria: IBanco;
   mantencion: EntryFields.Symbol;
   renta: EntryFields.Number;
@@ -12,8 +14,10 @@ export interface ITarjetaCreditoFields {
   requisitos: EntryFields.Text;
   marca: EntryFields.Symbol[];
   categoria: EntryFields.Symbol[];
-  beneficios: BaseEntry<any>[];
-  imagenTarjeta: Asset;
+  beneficios: IBeneficio[];
+  ofertaDeBienvenida?: EntryFields.Symbol;
+  pros?: EntryFields.Symbol[];
+  contras?: EntryFields.Symbol[];
   url: EntryFields.Symbol;
   slug: EntryFields.Symbol;
 }
@@ -24,6 +28,10 @@ export type ITarjetaCredito = BaseEntry<ITarjetaCreditoFields>;
 // Clean type for use in components
 export interface TarjetaCredito {
   nombre: string;
+  imagenTarjeta: {
+    url: string;
+    title: string;
+  };
   entidadBancaria: {
     nombreBanco: string;
     logoBanco: {
@@ -41,11 +49,10 @@ export interface TarjetaCredito {
   requisitos: string;
   marca: ('Visa' | 'Mastercard')[];
   categoria: ('Viajes' | 'Estudiantes' | 'Cashback' | 'Sin comisión' | 'Negocios' | 'Fidelización')[];
-  beneficios: any[];
-  imagenTarjeta: {
-    url: string;
-    title: string;
-  };
+  beneficios: any[]; // We'll type this properly when we have the beneficios type
+  ofertaDeBienvenida?: string;
+  pros?: string[];
+  contras?: string[];
   url: string;
   slug: string;
 }

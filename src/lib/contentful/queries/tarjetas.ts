@@ -20,6 +20,11 @@ export async function getTarjetas(): Promise<TarjetaCredito[]> {
       url: `https:${item.fields.imagenTarjeta.fields.file.url}`,
       title: item.fields.imagenTarjeta.fields.title,
     },
+    beneficios: item.fields.beneficios.map(beneficio => ({
+      ...beneficio.fields
+    })),
+    pros: item.fields.pros || [],
+    contras: item.fields.contras || [],
   }));
 }
 
@@ -48,5 +53,10 @@ export async function getTarjetaBySlug(slug: string): Promise<TarjetaCredito | n
       url: `https:${item.fields.imagenTarjeta.fields.file.url}`,
       title: item.fields.imagenTarjeta.fields.title,
     },
+    beneficios: item.fields.beneficios.map(beneficio => ({
+      ...beneficio.fields
+    })),
+    pros: item.fields.pros || [],
+    contras: item.fields.contras || [],
   };
 }
