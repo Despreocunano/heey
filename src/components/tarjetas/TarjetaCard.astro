@@ -28,7 +28,7 @@ const { tarjeta } = Astro.props;
           alt={tarjeta.entidadBancaria.logoBanco.title}
           class="h-4 w-auto object-contain mb-2"
         />
-        <h2 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
+        <h2 class="text-lg font-semibold text-gray-900 group-hover:text-lime-600 transition-colors leading-tight">
           {tarjeta.nombre}
         </h2>
       </div>
@@ -53,7 +53,7 @@ const { tarjeta } = Astro.props;
 
       <div class="flex flex-wrap gap-2 mt-4">
         {tarjeta.categoria.map((cat) => (
-          <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium">
+          <span class="px-3 py-1 bg-blue-50 text-gray-600 rounded-full text-sm font-medium">
             {cat}
           </span>
         ))}
@@ -69,3 +69,14 @@ const { tarjeta } = Astro.props;
     </div>
   </div>
 </a>
+
+<style is:inline>
+/* Ocultar scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE y Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari y Opera */
+}
+</style>
