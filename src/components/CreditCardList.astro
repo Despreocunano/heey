@@ -1,0 +1,33 @@
+---
+import type { Entry } from 'contentful';
+import type { CreditCard } from '../lib/contentful/types';
+
+interface Props {
+  cards: Entry<CreditCard>[];
+}
+
+const { cards } = Astro.props;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {
+    cards.map((card) => (
+      <a
+        href={`/cards/${card.fields.slug}`}
+        class="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      >
+        <div class="p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-2">
+            {card.fields.nombre}
+          </h2>
+          <p class="text-gray-600 mb-4">
+            Banco: {card.fields.entidadBancaria?.fields?.nombreBanco || 'No especificado'}
+          </p>
+          <div class="text-sm text-gray-500">
+            {card.fields.beneficios.length} beneficios disponibles
+          </div>
+        </div>
+      </a>
+    ))
+  }
+</div>
