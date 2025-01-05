@@ -1,0 +1,33 @@
+---
+import type { CreditCard } from '../../lib/contentful/types';
+import CardFeatures from './CardFeatures.astro';
+import CardImage from './CardImage.astro';
+
+interface Props {
+  card: CreditCard;
+}
+
+const { card } = Astro.props;
+---
+
+<div class="container mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Columna izquierda: Imagen y CTA -->
+    <div class="lg:col-span-4">
+      <div class="sticky top-8">
+        <CardImage card={card} />
+        <a
+          href="#"
+          class="mt-4 w-full block text-center px-6 py-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
+        >
+          Solicitar Tarjeta
+        </a>
+      </div>
+    </div>
+
+    <!-- Columna derecha: Características -->
+    <div class="lg:col-span-8">
+      <CardFeatures card={card} />
+    </div>
+  </div>
+</div>

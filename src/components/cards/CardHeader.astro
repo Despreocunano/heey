@@ -1,0 +1,20 @@
+---
+import type { CreditCard } from '../../lib/contentful/types';
+import BankInfo from '../BankInfo.astro';
+
+interface Props {
+  card: CreditCard;
+}
+
+const { card } = Astro.props;
+---
+
+<div class="bg-white shadow-sm border-b border-gray-200">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex items-center space-x-4">
+      <BankInfo bank={card.fields.entidadBancaria} />
+      <span class="text-gray-300">|</span>
+      <h1 class="text-xl font-semibold text-gray-900">{card.fields.nombre}</h1>
+    </div>
+  </div>
+</div>

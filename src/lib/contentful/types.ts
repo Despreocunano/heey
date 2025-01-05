@@ -57,6 +57,7 @@ export interface CreditCardFields {
   comisionInternacional?: string;
   requisitos: string;
   beneficios: Benefit[];
+  imagenTarjeta: Asset;
 }
 
 export interface CreditCardSkeleton extends EntrySkeletonType<CreditCardFields> {

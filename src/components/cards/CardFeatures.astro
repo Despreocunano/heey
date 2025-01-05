@@ -1,0 +1,70 @@
+---
+import type { CreditCard } from '../../lib/contentful/types';
+
+interface Props {
+  card: CreditCard;
+}
+
+const { card } = Astro.props;
+
+const formatCurrency = (amount: number) => {
+  return new Intl.NumberFormat('es-CL', { 
+    style: 'currency', 
+    currency: 'CLP',
+    maximumFractionDigits: 0
+  }).format(amount);
+};
+---
+
+<div class="space-y-8">
+  <!-- Características principales -->
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">Características principales</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="text-sm font-medium text-gray-500">Costo mantención mensual</h3>
+        <p class="text-lg font-semibold text-gray-900">{card.fields.mantencion}</p>
+      </div>
+      <div>
+        <h3 class="text-sm font-medium text-gray-500">Renta mínima</h3>
+        <p class="text-lg font-semibold text-gray-900">{formatCurrency(card.fields.renta)}</p>
+      </div>
+      {card.fields.comisionInternacional && (
+        <div>
+          <h3 class="text-sm font-medium text-gray-500">Comisión internacional</h3>
+          <p class="text-lg font-semibold text-gray-900">{card.fields.comisionInternacional}</p>
+        </div>
+      )}
+    </div>
+  </div>
+
+  <!-- Beneficios -->
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">Beneficios destacados</h2>
+    <div class="grid gap-4">
+      {card.fields.beneficios.map((beneficio) => (
+        <div class="flex items-start space-x-3">
+          <div class="flex-shrink-0">
+            <img
+              src={`https:${beneficio.fields.imagenBeneficio.fields.file.url}`}
+              alt=""
+              class="w-6 h-6 object-contain"
+            />
+          </div>
+          <div>
+            <h3 class="text-sm font-medium text-gray-900">{beneficio.fields.nombreBeneficio}</h3>
+            <p class="text-sm text-gray-500">{beneficio.fields.detalleBeneficio}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Requisitos -->
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">Requisitos</h2>
+    <div class="prose prose-sm max-w-none">
+      <p class="text-gray-600 whitespace-pre-line">{card.fields.requisitos}</p>
+    </div>
+  </div>
+</div>

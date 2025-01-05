@@ -11,24 +11,48 @@ const { cards } = Astro.props;
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
   {
-    cards.map((card) => (
-      <a
-        href={`/cards/${card.fields.slug}`}
-        class="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
-      >
-        <div class="p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">
-            {card.fields.nombre}
-          </h2>
-          <BankInfo bank={card.fields.entidadBancaria} className="mb-4" />
-          <div class="text-sm text-gray-500">
-            {card.fields.beneficios.length} beneficios disponibles
+    cards.map((card) => {
+      const cardImageUrl = card.fields.imagenTarjeta?.fields?.file?.url
+        ? `https:${card.fields.imagenTarjeta.fields.file.url}`
+        : '/placeholder-card.svg';
+      
+      const cardImageAlt = card.fields.imagenTarjeta?.fields?.description || card.fields.nombre;
+
+      return (
+        <a
+          href={`/cards/${card.fields.slug}`}
+          class="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden"
+        >
+          <div class="aspect-[16/9] bg-gray-100">
+            <img
+              src={cardImageUrl}
+              alt={cardImageAlt}
+              class="w-full h-full object-contain p-4"
+              loading="lazy"
+            />
           </div>
-          <div class="mt-2 text-sm text-gray-500">
-            Mantención: {card.fields.mantencion}
+          <div class="p-6">
+            <BankInfo bank={card.fields.entidadBancaria} className="mb-4" />
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">
+              {card.fields.nombre}
+            </h2>
+            <div class="space-y-2">
+              <div class="text-sm text-gray-500">
+                {card.fields.beneficios.length} beneficios disponibles
+              </div>
+              <div class="text-sm text-gray-500">
+                Mantención: {card.fields.mantencion}
+              </div>
+              <div class="text-sm text-gray-500">
+                Renta desde: {new Intl.NumberFormat('es-CL', { 
+                  style: 'currency', 
+                  currency: 'CLP' 
+                }).format(card.fields.renta)}
+              </div>
+            </div>
           </div>
-        </div>
-      </a>
-    ))
+        </a>
+      );
+    })
   }
 </div>

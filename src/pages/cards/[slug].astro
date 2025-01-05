@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import BenefitsList from '../../components/BenefitsList.astro';
-import BankInfo from '../../components/BankInfo.astro';
+import CardHeader from '../../components/cards/CardHeader.astro';
+import CardMainContent from '../../components/cards/CardMainContent.astro';
 import { getCreditCardBySlug, getCreditCards } from '../../lib/contentful/queries/creditCard';
 import type { GetStaticPaths } from 'astro';
 
@@ -18,70 +18,11 @@ const card = await getCreditCardBySlug(slug);
 if (!card) {
   return Astro.redirect('/404');
 }
-
-const formatCLP = (amount: number) => {
-  return new Intl.NumberFormat('es-CL', {
-    style: 'currency',
-    currency: 'CLP'
-  }).format(amount);
-};
 ---
 
 <Layout>
   <main class="min-h-screen bg-gray-50">
-    <div class="container mx-auto px-4 py-16">
-      <a href="/" class="text-blue-600 hover:text-blue-800 mb-8 inline-block">
-        ← Volver a la lista
-      </a>
-      
-      <div class="bg-white rounded-lg shadow-md p-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-6">
-          {card.fields.nombre}
-        </h1>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div>
-            <h2 class="text-xl font-semibold text-gray-700 mb-4">
-              Información General
-            </h2>
-            <BankInfo bank={card.fields.entidadBancaria} className="mb-4" />
-            <dl class="space-y-3">
-              <div>
-                <dt class="text-sm font-medium text-gray-500">Mantención</dt>
-                <dd class="text-gray-900">{card.fields.mantencion}</dd>
-              </div>
-              <div>
-                <dt class="text-sm font-medium text-gray-500">Renta Mínima</dt>
-                <dd class="text-gray-900">{formatCLP(card.fields.renta)}</dd>
-              </div>
-              {card.fields.comisionInternacional && (
-                <div>
-                  <dt class="text-sm font-medium text-gray-500">Comisión Internacional</dt>
-                  <dd class="text-gray-900">{card.fields.comisionInternacional}</dd>
-                </div>
-              )}
-            </dl>
-          </div>
-
-          <div>
-            <h2 class="text-xl font-semibold text-gray-700 mb-4">
-              Requisitos
-            </h2>
-            <div class="prose prose-sm">
-              <p class="text-gray-600 whitespace-pre-line">
-                {card.fields.requisitos}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <h2 class="text-xl font-semibold text-gray-700 mb-4">
-            Beneficios
-          </h2>
-          <BenefitsList benefits={card.fields.beneficios} />
-        </div>
-      </div>
-    </div>
+    <CardHeader card={card} />
+    <CardMainContent card={card} />
   </main>
 </Layout>
