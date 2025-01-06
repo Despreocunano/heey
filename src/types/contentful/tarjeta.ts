@@ -3,6 +3,9 @@ import type { Asset, BaseEntry } from './base';
 import type { IBanco } from './banco';
 import type { IBeneficio } from './beneficio';
 
+// Define Brand type
+export type Brand = 'Visa' | 'Mastercard';
+
 // Contentful Entry Fields
 export interface ITarjetaCreditoFields {
   nombre: EntryFields.Symbol;
@@ -51,7 +54,7 @@ export interface TarjetaCredito {
   renta: number;
   comisionInternacional?: string;
   requisitos: string;
-  marca: ('Visa' | 'Mastercard')[];
+  marca: Brand[];
   categoria: ('Viajes' | 'Estudiantes' | 'Cashback' | 'Sin comisión' | 'Negocios' | 'Fidelización')[];
   beneficios: any[]; // We'll type this properly when we have the beneficios type
   ofertaDeBienvenida?: string;
@@ -60,4 +63,3 @@ export interface TarjetaCredito {
   url: string;
   slug: string;
 }
-

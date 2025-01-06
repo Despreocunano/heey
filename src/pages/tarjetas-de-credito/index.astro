@@ -3,6 +3,8 @@ import Layout from '../../layouts/Layout.astro';
 import TarjetaCard from '../../components/tarjetas/TarjetaCard.astro';
 import TarjetaWelcome from '../../components/tarjetas/TarjetaWelcome.astro';
 import Filters from '../../components/tarjetas/Filters.astro';
+import ResultsCounter from '../../components/tarjetas/ResultsCounter.astro';
+import NoResults from '../../components/tarjetas/NoResults.astro';
 import { getTarjetas, getBancos } from '../../lib/contentful';
 
 const [tarjetas, bancos] = await Promise.all([
@@ -15,11 +17,50 @@ const [tarjetas, bancos] = await Promise.all([
   <TarjetaWelcome />
   <main class="container mx-auto px-4 py-8">
     <Filters tarjetas={tarjetas} bancos={bancos} />
+    <ResultsCounter total={tarjetas.length} />
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {tarjetas.map((tarjeta) => (
-        <TarjetaCard tarjeta={tarjeta} />
-      ))}
+    <div id="results-container">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {tarjetas.map((tarjeta) => (
+          <TarjetaCard tarjeta={tarjeta} />
+        ))}
+      </div>
+      <div id="no-results" class="hidden">
+        <NoResults />
+      </div>
     </div>
   </main>
 </Layout>
+
+<script>
+  // Update results counter and toggle no-results component
+  function updateResults() {
+    const visibleCards = document.querySelectorAll('[data-card-item]:not([style*="display: none"])');
+    const total = visibleCards.length;
+    
+    // Update counter
+    const counter = document.querySelector('h2');
+    if (counter) {
+      counter.textContent = total === 0 ? 'No se encontraron tarjetas' : 
+        `${total} tarjeta${total === 1 ? '' : 's'} disponible${total === 1 ? '' : 's'}`;
+    }
+
+    // Toggle visibility of results/no-results
+    const resultsGrid = document.querySelector('.grid');
+    const noResults = document.querySelector('#no-results');
+    if (resultsGrid && noResults) {
+      resultsGrid.classList.toggle('hidden', total === 0);
+      noResults.classList.toggle('hidden', total > 0);
+    }
+  }
+
+  // Listen for filter changes
+  document.addEventListener('astro:page-load', () => {
+    ['filter-change', 'clear-filters'].forEach(event => {
+      document.addEventListener(event, () => {
+        // Wait for DOM updates
+        setTimeout(updateResults, 0);
+      });
+    });
+  });
+</script>

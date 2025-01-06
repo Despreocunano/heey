@@ -2,25 +2,49 @@ import { arrayIncludes, logFilterDebug, normalizeString } from './utils';
 
 export class CardFilters {
   private cards: NodeListOf<Element>;
-  private selects: NodeListOf<HTMLSelectElement>;
+  private selectedCategory: string = '';
+  private selectedBrand: string = '';
+  private selectedBank: string = '';
   
   constructor() {
     this.cards = document.querySelectorAll('[data-card-item]');
-    this.selects = document.querySelectorAll('.filter-select');
     this.init();
   }
 
   private init(): void {
-    this.selects.forEach(select => {
-      select.addEventListener('change', () => this.filterCards());
+    // Escuchar eventos de filtro
+    document.addEventListener('filter-change', ((event: CustomEvent) => {
+      if (event.detail.type === 'categoria') {
+        this.selectedCategory = event.detail.value;
+      } else if (event.detail.type === 'marca') {
+        this.selectedBrand = event.detail.value;
+      } else if (event.detail.type === 'banco') {
+        this.selectedBank = event.detail.value;
+      }
+      this.filterCards();
+    }) as EventListener);
+
+    // Escuchar evento de limpiar filtros
+    document.addEventListener('clear-filters', () => {
+      this.selectedCategory = '';
+      this.selectedBrand = '';
+      this.selectedBank = '';
+      
+      // Disparar eventos para actualizar UI
+      ['categoria', 'marca', 'banco'].forEach(type => {
+        const event = new CustomEvent('filter-reset', { detail: { type } });
+        document.dispatchEvent(event);
+      });
+      
+      this.filterCards();
     });
   }
 
   private getFilters(): Record<string, string> {
     return {
-      categoria: (document.getElementById('categoria') as HTMLSelectElement)?.value || '',
-      banco: (document.getElementById('banco') as HTMLSelectElement)?.value || '',
-      marca: (document.getElementById('marca') as HTMLSelectElement)?.value || ''
+      categoria: this.selectedCategory,
+      banco: this.selectedBank,
+      marca: this.selectedBrand
     };
   }
 
@@ -33,7 +57,6 @@ export class CardFilters {
   }
 
   private isCardVisible(filters: Record<string, string>, cardData: Record<string, string | string[]>): boolean {
-    // Log filter debug information
     logFilterDebug(filters, cardData);
 
     return (

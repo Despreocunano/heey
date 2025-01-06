@@ -1,0 +1,12 @@
+---
+interface Props {
+  total: number;
+}
+
+const { total } = Astro.props;
+---
+
+<h2 class="text-xl font-semibold text-gray-900 mb-6">
+  {total === 0 ? 'No se encontraron tarjetas' : 
+    `${total} tarjeta${total === 1 ? '' : 's'} disponible${total === 1 ? '' : 's'}`}
+</h2>

@@ -1,0 +1,18 @@
+---
+interface Props {
+  brand: string;
+  className?: string;
+}
+
+const { brand, className = "h-2" } = Astro.props;
+
+const logoPath = brand.toLowerCase() === 'visa' 
+  ? '/images/visa-logo.svg'
+  : '/images/mastercard-logo.svg';
+---
+
+<img 
+  src={logoPath} 
+  alt={`Logo ${brand}`}
+  class={className}
+/>
