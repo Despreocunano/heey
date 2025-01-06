@@ -26,13 +26,15 @@ const breadcrumb = [
   { label: banco.nombreBanco, href: `/banco/${banco.slug}`, current: true }
 ];
 
+const title = `Tarjetas de Crédito ${banco.nombreBanco}`;
+const description = `Descubre todas las tarjetas de crédito de ${banco.nombreBanco}. Compara beneficios, requisitos y encuentra la mejor tarjeta para ti.`;
+
 interface ContactCard {
   label: string;
   value: string;
   href: string;
 }
 
-// Contact info cards data with proper typing
 const contactCards: ContactCard[] = [
   banco.emergencias ? {
     label: "Emergencias Bancarias",
@@ -52,7 +54,11 @@ const contactCards: ContactCard[] = [
 ].filter((card): card is ContactCard => card !== null);
 ---
 
-<Layout breadcrumb={breadcrumb}>
+<Layout 
+  title={title}
+  description={description}
+  breadcrumb={breadcrumb}
+>
   <main class="bg-gray-50 min-h-screen">
     <div class="bg-gradient-to-b from-white to-gray-50 border-b border-gray-200">
       <div class="container mx-auto px-4">

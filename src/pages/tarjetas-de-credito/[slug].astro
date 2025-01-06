@@ -19,9 +19,16 @@ const breadcrumb = [
   { label: 'Tarjetas de Crédito', href: '/tarjetas-de-credito' },
   { label: tarjeta.nombre, href: `/tarjetas-de-credito/${tarjeta.slug}`, current: true }
 ];
+
+const title = `Tarjeta de Crédito ${tarjeta.nombre}`;
+const description = `Conoce la tarjeta de crédito ${tarjeta.nombre} de ${tarjeta.entidadBancaria.nombreBanco}. Requisitos, beneficios, costos de mantención y más información.`;
 ---
 
-<Layout breadcrumb={breadcrumb}>
+<Layout 
+  title={title}
+  description={description}
+  breadcrumb={breadcrumb}
+>
   <main class="container mx-auto px-4">
     <div class="max-w-6xl mx-auto">
       <TarjetaDetail tarjeta={tarjeta} />
