@@ -10,10 +10,32 @@ export class CardFilters {
     this.cards = document.querySelectorAll('[data-card-item]');
     this.init();
     this.restoreFilters();
+    this.setupNavigationCleanup();
+  }
+
+  private setupNavigationCleanup() {
+    document.addEventListener('astro:before-preparation', (e: any) => {
+      if (!e.to.pathname.includes('/tarjetas-de-credito')) {
+        this.clearAllFilters();
+        // Also dispatch events to update UI
+        ['categoria', 'marca', 'banco'].forEach(type => {
+          document.dispatchEvent(new CustomEvent('filter-reset', { detail: { type } }));
+        });
+      }
+    });
+  }
+
+  private clearAllFilters() {
+    sessionStorage.removeItem('filter-categoria');
+    sessionStorage.removeItem('filter-marca');
+    sessionStorage.removeItem('filter-banco');
+    this.selectedCategory = '';
+    this.selectedBrand = '';
+    this.selectedBank = '';
+    this.filterCards();
   }
 
   private init(): void {
-    // Escuchar eventos de filtro
     document.addEventListener('filter-change', ((event: CustomEvent) => {
       if (event.detail.type === 'categoria') {
         this.selectedCategory = event.detail.value;
@@ -28,29 +50,12 @@ export class CardFilters {
       this.filterCards();
     }) as EventListener);
 
-    // Escuchar evento de limpiar filtros
     document.addEventListener('clear-filters', () => {
-      this.selectedCategory = '';
-      this.selectedBrand = '';
-      this.selectedBank = '';
-      
-      // Limpiar sessionStorage
-      sessionStorage.removeItem('filter-categoria');
-      sessionStorage.removeItem('filter-marca');
-      sessionStorage.removeItem('filter-banco');
-      
-      // Disparar eventos para actualizar UI
-      ['categoria', 'marca', 'banco'].forEach(type => {
-        const event = new CustomEvent('filter-reset', { detail: { type } });
-        document.dispatchEvent(event);
-      });
-      
-      this.filterCards();
+      this.clearAllFilters();
     });
   }
 
   private restoreFilters(): void {
-    // Restaurar filtros desde sessionStorage
     const categoria = sessionStorage.getItem('filter-categoria');
     const marca = sessionStorage.getItem('filter-marca');
     const banco = sessionStorage.getItem('filter-banco');
@@ -76,7 +81,6 @@ export class CardFilters {
       }));
     }
 
-    // Si hay algún filtro activo, aplicar filtros
     if (categoria || marca || banco) {
       this.filterCards();
     }
@@ -120,7 +124,6 @@ export class CardFilters {
       card.style.display = isVisible ? 'block' : 'none';
     });
 
-    // Disparar evento para actualizar contador
     document.dispatchEvent(new CustomEvent('filter-change'));
   }
 }

@@ -1,0 +1,46 @@
+---
+const features = [
+  {
+    title: "Comparaciones Imparciales",
+    description: "Analizamos objetivamente cada producto financiero para darte la mejor información.",
+    icon: "⭐"
+  },
+  {
+    title: "Actualizado Diariamente",
+    description: "Mantenemos nuestra información al día para que tomes las mejores decisiones.",
+    icon: "🔄"
+  },
+  {
+    title: "Expertos Financieros",
+    description: "Nuestro equipo de expertos analiza cada detalle para ti.",
+    icon: "👨‍💼"
+  }
+];
+---
+
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">
+        ¿Por qué elegirnos?
+      </h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Te ayudamos a tomar decisiones financieras inteligentes con información clara y confiable
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {features.map(feature => (
+        <div class="text-center">
+          <div class="text-4xl mb-4">{feature.icon}</div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            {feature.title}
+          </h3>
+          <p class="text-gray-600">
+            {feature.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

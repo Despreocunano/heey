@@ -1,0 +1,29 @@
+---
+import type { TarjetaCredito } from '../../types/contentful';
+import TarjetaCard from '../tarjetas/TarjetaCard.astro';
+
+interface Props {
+  tarjetas: TarjetaCredito[];
+}
+
+const { tarjetas } = Astro.props;
+---
+
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">
+        Tarjetas destacadas del mes
+      </h2>
+      <p class="text-xl text-gray-600">
+        Las mejores opciones seleccionadas por nuestros expertos
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {tarjetas.slice(0, 3).map((tarjeta) => (
+        <TarjetaCard tarjeta={tarjeta} />
+      ))}
+    </div>
+  </div>
+</section>

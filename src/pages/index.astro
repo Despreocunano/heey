@@ -1,11 +1,19 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/home/Hero.astro';
+import ProductCategories from '../components/home/ProductCategories.astro';
+import FeaturedCards from '../components/home/FeaturedCards.astro';
+import WhyUs from '../components/home/WhyUs.astro';
+import { getTarjetas } from '../lib/contentful';
 
+const tarjetas = await getTarjetas();
 ---
 
 <Layout>
-  <main class="container mx-auto px-4 py-8">
-    <Welcome />
+  <main>
+    <Hero />
+    <ProductCategories />
+    <FeaturedCards tarjetas={tarjetas} />
+    <WhyUs />
   </main>
 </Layout>

@@ -20,7 +20,7 @@ const [tarjetas, bancos] = await Promise.all([
     <ResultsCounter total={tarjetas.length} />
     
     <div id="results-container">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {tarjetas.map((tarjeta) => (
           <TarjetaCard tarjeta={tarjeta} />
         ))}
@@ -38,12 +38,9 @@ const [tarjetas, bancos] = await Promise.all([
   let filtersInstance: CardFilters | null = null;
 
   function initializeFilters() {
-    // Clean up previous instance if it exists
     if (filtersInstance) {
       // Add cleanup if needed
     }
-    
-    // Create new instance
     filtersInstance = new CardFilters();
   }
 
@@ -55,27 +52,17 @@ const [tarjetas, bancos] = await Promise.all([
     initializeFilters();
   });
 
-  // Clean up on page transitions
-  document.addEventListener('astro:before-preparation', () => {
-    if (filtersInstance) {
-      // Add cleanup if needed
-      filtersInstance = null;
-    }
-  });
-
   // Update results counter and toggle no-results component
   function updateResults() {
     const visibleCards = document.querySelectorAll('[data-card-item]:not([style*="display: none"])');
     const total = visibleCards.length;
     
-    // Update counter
     const counter = document.querySelector('h2');
     if (counter) {
       counter.textContent = total === 0 ? 'No se encontraron tarjetas' : 
         `${total} tarjeta${total === 1 ? '' : 's'} disponible${total === 1 ? '' : 's'}`;
     }
 
-    // Toggle visibility of results/no-results
     const resultsGrid = document.querySelector('.grid');
     const noResults = document.querySelector('#no-results');
     if (resultsGrid && noResults) {
