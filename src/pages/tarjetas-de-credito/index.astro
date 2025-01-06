@@ -21,66 +21,21 @@ const breadcrumb = [
 <Layout>
   <TarjetaWelcome breadcrumb={breadcrumb} />
   <main class="container mx-auto px-4 py-8">
-    <Filters tarjetas={tarjetas} bancos={bancos} />
-    <ResultsCounter total={tarjetas.length} />
-    
-    <div id="results-container">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {tarjetas.map((tarjeta) => (
-          <TarjetaCard tarjeta={tarjeta} />
-        ))}
-      </div>
-      <div id="no-results" class="hidden">
-        <NoResults />
+    <div class="space-y-8">
+      <Filters tarjetas={tarjetas} bancos={bancos} />
+      <div>
+        <ResultsCounter total={tarjetas.length} />
+        <div id="results-container">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {tarjetas.map((tarjeta) => (
+              <TarjetaCard tarjeta={tarjeta} />
+            ))}
+          </div>
+          <div id="no-results" class="hidden">
+            <NoResults />
+          </div>
+        </div>
       </div>
     </div>
   </main>
 </Layout>
-<script>
-  import { CardFilters } from '../../components/tarjetas/filters/CardFilters';
-
-  let filtersInstance: CardFilters | null = null;
-
-  function initializeFilters() {
-    if (filtersInstance) {
-      // Add cleanup if needed
-    }
-    filtersInstance = new CardFilters();
-  }
-
-  // Initialize on first load
-  initializeFilters();
-
-  // Re-initialize on view transitions
-  document.addEventListener('astro:page-load', () => {
-    initializeFilters();
-  });
-
-  // Update results counter and toggle no-results component
-  function updateResults() {
-    const visibleCards = document.querySelectorAll('[data-card-item]:not([style*="display: none"])');
-    const total = visibleCards.length;
-    
-    const counter = document.querySelector('h2');
-    if (counter) {
-      counter.textContent = total === 0 ? 'No se encontraron tarjetas' : 
-        `${total} tarjeta${total === 1 ? '' : 's'} disponible${total === 1 ? '' : 's'}`;
-    }
-
-    const resultsGrid = document.querySelector('.grid');
-    const noResults = document.querySelector('#no-results');
-    if (resultsGrid && noResults) {
-      resultsGrid.classList.toggle('hidden', total === 0);
-      noResults.classList.toggle('hidden', total > 0);
-    }
-  }
-
-  // Listen for filter changes
-  document.addEventListener('astro:page-load', () => {
-    ['filter-change', 'clear-filters'].forEach(event => {
-      document.addEventListener(event, () => {
-        setTimeout(updateResults, 0);
-      });
-    });
-  });
-</script>

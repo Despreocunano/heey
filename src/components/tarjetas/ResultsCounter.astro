@@ -6,7 +6,21 @@ interface Props {
 const { total } = Astro.props;
 ---
 
-<h2 class="text-xl font-semibold text-gray-900 mb-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-6" id="results-counter">
   {total === 0 ? 'No se encontraron tarjetas' : 
     `${total} tarjeta${total === 1 ? '' : 's'} disponible${total === 1 ? '' : 's'}`}
 </h2>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const counter = document.getElementById('results-counter');
+    
+    document.addEventListener('update-counter', (event: any) => {
+      if (counter) {
+        const count = event.detail.count;
+        counter.textContent = count === 0 ? 'No se encontraron tarjetas' :
+          `${count} tarjeta${count === 1 ? '' : 's'} disponible${count === 1 ? '' : 's'}`;
+      }
+    });
+  });
+</script>
