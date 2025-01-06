@@ -12,6 +12,9 @@ interface Props {
 
 const { items, textColor = "text-gray-500" } = Astro.props;
 
+// Get previous page for mobile back link
+const previousPage = items[items.length - 2];
+
 // Generate JSON-LD schema
 const schemaData = {
   "@context": "https://schema.org",
@@ -27,8 +30,20 @@ const schemaData = {
 };
 ---
 
-{/* Visible Breadcrumb */}
-<nav class="max-w-6xl mx-auto px-4 py-4" aria-label="Breadcrumb">
+{/* Mobile Back Link */}
+<nav class={`md:hidden max-w-7xl mx-auto px-4 py-4 ${textColor}`} aria-label="Back">
+  {previousPage && (
+    <a href={previousPage.href} class="flex items-center gap-1">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+      </svg>
+      Volver a {previousPage.label}
+    </a>
+  )}
+</nav>
+
+{/* Desktop Breadcrumb */}
+<nav class="hidden md:block max-w-7xl mx-auto px-4 py-4" aria-label="Breadcrumb">
   <ol class="flex items-center space-x-2 text-sm">
     {items.map((item, index) => (
       <li class="flex items-center">
