@@ -33,6 +33,36 @@ const [tarjetas, bancos] = await Promise.all([
 </Layout>
 
 <script>
+  import { CardFilters } from '../../components/tarjetas/filters/CardFilters';
+
+  let filtersInstance: CardFilters | null = null;
+
+  function initializeFilters() {
+    // Clean up previous instance if it exists
+    if (filtersInstance) {
+      // Add cleanup if needed
+    }
+    
+    // Create new instance
+    filtersInstance = new CardFilters();
+  }
+
+  // Initialize on first load
+  initializeFilters();
+
+  // Re-initialize on view transitions
+  document.addEventListener('astro:page-load', () => {
+    initializeFilters();
+  });
+
+  // Clean up on page transitions
+  document.addEventListener('astro:before-preparation', () => {
+    if (filtersInstance) {
+      // Add cleanup if needed
+      filtersInstance = null;
+    }
+  });
+
   // Update results counter and toggle no-results component
   function updateResults() {
     const visibleCards = document.querySelectorAll('[data-card-item]:not([style*="display: none"])');
@@ -58,7 +88,6 @@ const [tarjetas, bancos] = await Promise.all([
   document.addEventListener('astro:page-load', () => {
     ['filter-change', 'clear-filters'].forEach(event => {
       document.addEventListener(event, () => {
-        // Wait for DOM updates
         setTimeout(updateResults, 0);
       });
     });
