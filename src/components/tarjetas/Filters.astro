@@ -14,38 +14,29 @@ interface Props {
 
 const { tarjetas, bancos } = Astro.props;
 
-// Obtener categorías únicas de todas las tarjetas
 const categorias = [...new Set(tarjetas.flatMap(t => t.categoria))].sort();
-
-// Obtener marcas únicas de todas las tarjetas
 const marcas = [...new Set(tarjetas.flatMap(t => t.marca))].sort();
 ---
 
 <div>
   {/* Desktop Filters */}
-  <div class="hidden md:block bg-white rounded-lg shadow-sm p-6 mb-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-4">Filtros</h3>
-    
-    <div class="space-y-6">
-      {/* Categorías y Marcas */}
-      <div class="flex flex-wrap items-center gap-6">
-        <div class="flex-1 overflow-x-auto scrollbar-hide">
-          <CategoryFilter client:load categories={categorias} />
-        </div>
-        <div class="flex-shrink-0">
-          <BrandFilter client:load brands={marcas} />
-        </div>
+  <div class="hidden md:block space-y-6 mb-8">
+    {/* Categories and Banks */}
+    <div class="grid grid-cols-2 gap-6">
+      <div class="space-y-2">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Categoría</h3>
+        <CategoryFilter client:load categories={categorias} />
       </div>
+      <div class="space-y-2">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Banco</h3>
+        <BankFilter client:load banks={bancos} />
+      </div>
+    </div>
 
-      {/* Bancos y Limpiar Filtros */}
-      <div class="flex items-end justify-between gap-4">
-        <div class="flex-1">
-          <BankFilter client:load banks={bancos} />
-        </div>
-        <div class="flex-shrink-0">
-          <ClearFilters client:load />
-        </div>
-      </div>
+    {/* Brands and Clear filters */}
+    <div class="flex items-center justify-between">
+      <BrandFilter client:load brands={marcas} />
+      <ClearFilters client:load />
     </div>
   </div>
 
@@ -59,21 +50,8 @@ const marcas = [...new Set(tarjetas.flatMap(t => t.marca))].sort();
   />
 </div>
 
-<style>
-  /* Hide scrollbar */
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-</style>
-
 <script>
   import { CardFilters } from './filters/CardFilters';
-
-  // Initialize filters
   document.addEventListener('astro:page-load', () => {
     new CardFilters();
   });

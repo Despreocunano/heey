@@ -34,9 +34,6 @@ export function BankFilter({ banks }: BankFilterProps) {
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">
-        Banco
-      </label>
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" data-filter-banco={selectedBank}>
         <button
           onClick={() => handleBankChange('')}
