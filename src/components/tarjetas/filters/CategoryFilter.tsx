@@ -7,6 +7,14 @@ interface CategoryFilterProps {
 export function CategoryFilter({ categories }: CategoryFilterProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
 
+  // Move sessionStorage access to useEffect
+  useEffect(() => {
+    const savedCategory = sessionStorage.getItem('filter-categoria');
+    if (savedCategory) {
+      setSelectedCategory(savedCategory);
+    }
+  }, []);
+
   useEffect(() => {
     const handleReset = (event: CustomEvent) => {
       if (event.detail.type === 'categoria') {
@@ -20,13 +28,13 @@ export function CategoryFilter({ categories }: CategoryFilterProps) {
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
+    sessionStorage.setItem('filter-categoria', category);
     
     const event = new CustomEvent('filter-change', {
       detail: { type: 'categoria', value: category }
     });
     document.dispatchEvent(event);
 
-    // Update data attribute for active filters check
     document.querySelector('[data-filter-categoria]')?.setAttribute('data-filter-categoria', category);
   };
 

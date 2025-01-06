@@ -22,7 +22,6 @@ const { tarjeta } = Astro.props;
         src={tarjeta.imagenTarjeta.url} 
         alt={tarjeta.imagenTarjeta.title}
         class="w-full h-40 object-contain transform group-hover:scale-105 transition-transform duration-300"
-        transition:name={`tarjeta-${tarjeta.slug}`}
       />
     </div>
     
@@ -55,5 +54,6 @@ const { tarjeta } = Astro.props;
           <span>Renta mínima: ${tarjeta.renta.toLocaleString('es-CL')}</span>
         </div>
       </div>
+    </div>
   </div>
 </a>

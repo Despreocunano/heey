@@ -8,6 +8,14 @@ interface BrandFilterProps {
 export function BrandFilter({ brands }: BrandFilterProps) {
   const [selectedBrand, setSelectedBrand] = useState('');
 
+  // Move sessionStorage access to useEffect
+  useEffect(() => {
+    const savedBrand = sessionStorage.getItem('filter-marca');
+    if (savedBrand) {
+      setSelectedBrand(savedBrand);
+    }
+  }, []);
+
   useEffect(() => {
     const handleReset = (event: CustomEvent) => {
       if (event.detail.type === 'marca') {
@@ -22,13 +30,13 @@ export function BrandFilter({ brands }: BrandFilterProps) {
   const handleBrandChange = (brand: string) => {
     const newBrand = selectedBrand === brand ? '' : brand;
     setSelectedBrand(newBrand);
+    sessionStorage.setItem('filter-marca', newBrand);
     
     const event = new CustomEvent('filter-change', {
       detail: { type: 'marca', value: newBrand }
     });
     document.dispatchEvent(event);
 
-    // Update data attribute for active filters check
     document.querySelector('[data-filter-marca]')?.setAttribute('data-filter-marca', newBrand);
   };
 
@@ -38,16 +46,16 @@ export function BrandFilter({ brands }: BrandFilterProps) {
         <button
           key={brand}
           onClick={() => handleBrandChange(brand)}
-          className={`px-6 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
+          className={`px-6 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
             selectedBrand === brand
               ? 'bg-lime-600 text-white'
               : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
           }`}
         >
           <img 
-            src={`/images/${brand.toLowerCase() === 'americanexpress' ? 'amex' : brand.toLowerCase()}-logo.svg`}
+            src={`/images/${brand.toLowerCase()}-logo.svg`}
             alt={brand}
-            className="h-6"
+            className="h-8"
           />
         </button>
       ))}

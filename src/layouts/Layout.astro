@@ -1,7 +1,6 @@
 ---
 import Header from '../components/header/Header.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
-import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   breadcrumb?: {
@@ -22,7 +21,6 @@ const showBreadcrumb = breadcrumb && Astro.url.pathname !== '/';
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Heey!</title>
-    <ClientRouter />
   </head>
   <body>
     <Header />

@@ -1,62 +1,74 @@
-import { arrayIncludes, logFilterDebug, normalizeString } from './utils';
+import { arrayIncludes, normalizeString } from './utils';
 
 export class CardFilters {
-  private cards: NodeListOf<Element> = document.querySelectorAll('[data-card-item]');
+  private cards: NodeListOf<Element>;
   private selectedCategory: string = '';
   private selectedBrand: string = '';
   private selectedBank: string = '';
-  private resultsContainer: HTMLElement | null = document.querySelector('#results-container');
-  private noResultsElement: HTMLElement | null = document.querySelector('#no-results');
+  private resultsContainer: HTMLElement | null;
+  private noResultsElement: HTMLElement | null;
+  private boundEventListeners: { [key: string]: EventListener } = {};
   
   constructor() {
-    requestAnimationFrame(() => {
-      this.initialize();
-    });
-  }
-
-  private initialize(): void {
-    // Refresh DOM queries in case elements weren't ready during initial initialization
     this.cards = document.querySelectorAll('[data-card-item]');
     this.resultsContainer = document.querySelector('#results-container');
     this.noResultsElement = document.querySelector('#no-results');
-    
+    this.initialize();
+  }
+
+  private initialize(): void {
     this.setupEventListeners();
     this.restoreFilters();
+    this.filterCards();
   }
 
   private setupEventListeners(): void {
-    document.addEventListener('filter-change', ((event: CustomEvent) => {
-      if (event.detail?.type === 'categoria') {
-        this.selectedCategory = event.detail.value;
-        sessionStorage.setItem('filter-categoria', event.detail.value);
-      } else if (event.detail?.type === 'marca') {
-        this.selectedBrand = event.detail.value;
-        sessionStorage.setItem('filter-marca', event.detail.value);
-      } else if (event.detail?.type === 'banco') {
-        this.selectedBank = event.detail.value;
-        sessionStorage.setItem('filter-banco', event.detail.value);
-      }
-      this.filterCards();
-    }) as EventListener);
+    this.boundEventListeners = {
+      filterChange: ((event: CustomEvent) => {
+        if (event.detail?.type === 'categoria') {
+          this.selectedCategory = event.detail.value;
+          sessionStorage.setItem('filter-categoria', event.detail.value);
+        } else if (event.detail?.type === 'marca') {
+          this.selectedBrand = event.detail.value;
+          sessionStorage.setItem('filter-marca', event.detail.value);
+        } else if (event.detail?.type === 'banco') {
+          this.selectedBank = event.detail.value;
+          sessionStorage.setItem('filter-banco', event.detail.value);
+        }
+        this.filterCards();
+      }) as EventListener,
 
-    document.addEventListener('clear-filters', () => {
-      this.selectedCategory = '';
-      this.selectedBrand = '';
-      this.selectedBank = '';
-      
-      sessionStorage.removeItem('filter-categoria');
-      sessionStorage.removeItem('filter-marca');
-      sessionStorage.removeItem('filter-banco');
-      
-      ['categoria', 'marca', 'banco'].forEach(type => {
-        document.dispatchEvent(new CustomEvent('filter-reset', { detail: { type } }));
-      });
-      
-      this.filterCards();
-    });
+      clearFilters: (() => {
+        this.selectedCategory = '';
+        this.selectedBrand = '';
+        this.selectedBank = '';
+        
+        sessionStorage.removeItem('filter-categoria');
+        sessionStorage.removeItem('filter-marca');
+        sessionStorage.removeItem('filter-banco');
+        
+        ['categoria', 'marca', 'banco'].forEach(type => {
+          document.dispatchEvent(new CustomEvent('filter-reset', { detail: { type } }));
+        });
+        
+        this.filterCards();
+      }) as EventListener,
+
+      cleanup: (() => {
+        this.cleanup();
+      }) as EventListener
+    };
+
+    document.addEventListener('filter-change', this.boundEventListeners.filterChange);
+    document.addEventListener('clear-filters', this.boundEventListeners.clearFilters);
+    document.addEventListener('astro:before-preparation', this.boundEventListeners.cleanup);
   }
 
-
+  private cleanup(): void {
+    document.removeEventListener('filter-change', this.boundEventListeners.filterChange);
+    document.removeEventListener('clear-filters', this.boundEventListeners.clearFilters);
+    document.removeEventListener('astro:before-preparation', this.boundEventListeners.cleanup);
+  }
 
   private restoreFilters(): void {
     const categoria = sessionStorage.getItem('filter-categoria');
@@ -83,10 +95,6 @@ export class CardFilters {
         detail: { type: 'banco', value: banco }
       }));
     }
-
-    if (categoria || marca || banco) {
-      this.filterCards();
-    }
   }
 
   private getFilters(): Record<string, string> {
@@ -106,8 +114,6 @@ export class CardFilters {
   }
 
   private isCardVisible(filters: Record<string, string>, cardData: Record<string, string | string[]>): boolean {
-    logFilterDebug(filters, cardData);
-
     return (
       (!filters.categoria || arrayIncludes(cardData.categorias as string[], filters.categoria)) &&
       (!filters.banco || normalizeString(cardData.banco as string) === normalizeString(filters.banco)) &&
@@ -133,7 +139,6 @@ export class CardFilters {
       }
     });
 
-    // Update visibility of results/no-results containers
     if (this.resultsContainer && this.noResultsElement) {
       const gridContainer = this.resultsContainer.querySelector('.grid');
       if (gridContainer) {
@@ -142,7 +147,6 @@ export class CardFilters {
       this.noResultsElement.classList.toggle('hidden', visibleCount > 0);
     }
 
-    // Update counter
     document.dispatchEvent(new CustomEvent('update-counter', { 
       detail: { count: visibleCount } 
     }));

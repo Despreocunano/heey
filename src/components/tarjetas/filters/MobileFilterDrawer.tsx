@@ -40,17 +40,14 @@ export function MobileFilterDrawer({ categories, brands, banks }: MobileFilterDr
   }, []);
 
   const closeDrawer = () => {
-    setIsVisible(false);
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 300);
+    const event = new CustomEvent('close-mobile-filters');
+    document.dispatchEvent(event);
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="md:hidden fixed inset-0 z-50">
-      {/* Backdrop */}
       <div 
         className={`absolute inset-0 bg-black transition-opacity duration-300 ease-in-out ${
           isVisible ? 'opacity-25' : 'opacity-0'
@@ -58,18 +55,15 @@ export function MobileFilterDrawer({ categories, brands, banks }: MobileFilterDr
         onClick={closeDrawer}
       />
       
-      {/* Drawer */}
       <div 
         className={`absolute inset-x-0 bottom-0 transform transition-transform duration-300 ease-in-out ${
           isVisible ? 'translate-y-0' : 'translate-y-full'
         } bg-white rounded-t-2xl max-h-[90vh] overflow-y-auto`}
       >
-        {/* Handle */}
         <div className="flex justify-center pt-4 pb-2">
           <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
         </div>
         
-        {/* Content */}
         <div className="px-4 pb-8">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-gray-900">Filtros</h3>

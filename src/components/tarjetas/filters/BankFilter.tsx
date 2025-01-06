@@ -8,6 +8,14 @@ interface BankFilterProps {
 export function BankFilter({ banks }: BankFilterProps) {
   const [selectedBank, setSelectedBank] = useState('');
 
+  // Move sessionStorage access to useEffect
+  useEffect(() => {
+    const savedBank = sessionStorage.getItem('filter-banco');
+    if (savedBank) {
+      setSelectedBank(savedBank);
+    }
+  }, []);
+
   useEffect(() => {
     const handleReset = (event: CustomEvent) => {
       if (event.detail.type === 'banco') {
@@ -22,13 +30,13 @@ export function BankFilter({ banks }: BankFilterProps) {
   const handleBankChange = (bank: string) => {
     const newBank = selectedBank === bank ? '' : bank;
     setSelectedBank(newBank);
+    sessionStorage.setItem('filter-banco', newBank);
     
     const event = new CustomEvent('filter-change', {
       detail: { type: 'banco', value: newBank }
     });
     document.dispatchEvent(event);
 
-    // Update data attribute for active filters check
     document.querySelector('[data-filter-banco]')?.setAttribute('data-filter-banco', newBank);
   };
 
