@@ -55,22 +55,5 @@ const { tarjeta } = Astro.props;
           <span>Renta mínima: ${tarjeta.renta.toLocaleString('es-CL')}</span>
         </div>
       </div>
-
-      <div class="flex flex-wrap gap-2 mt-4">
-        {tarjeta.categoria.map((cat) => (
-          <span class="px-3 py-1 bg-blue-50 text-gray-600 rounded-full text-sm font-medium">
-            {cat}
-          </span>
-        ))}
-      </div>
-
-      <div class="flex gap-2 mt-4">
-        {tarjeta.marca.map((marca) => (
-          <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm font-medium">
-            {marca}
-          </span>
-        ))}
-      </div>
-    </div>
   </div>
 </a>

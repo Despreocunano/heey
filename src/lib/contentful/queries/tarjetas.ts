@@ -20,6 +20,10 @@ export async function getTarjetas(): Promise<TarjetaCredito[]> {
       url: `https:${item.fields.imagenTarjeta.fields.file.url}`,
       title: item.fields.imagenTarjeta.fields.title,
     },
+    emisor: {
+      url: `https:${item.fields.emisor.fields.file.url}`,
+      title: item.fields.emisor.fields.title,
+    },
     beneficios: item.fields.beneficios.map(beneficio => ({
       ...beneficio.fields
     })),
@@ -27,7 +31,6 @@ export async function getTarjetas(): Promise<TarjetaCredito[]> {
     contras: item.fields.contras || [],
   }));
 }
-
 export async function getTarjetaBySlug(slug: string): Promise<TarjetaCredito | null> {
   const response = await client.getEntries<ITarjetaCreditoFields>({
     content_type: 'tarjetaDeCredito',

@@ -38,6 +38,10 @@ export interface TarjetaCredito {
       url: string;
       title: string;
     };
+    emisor: {
+      url: string;
+      title: string;
+    };
     emergencias?: string;
     emergenciasInternacionales?: string;
     whatsapp?: string;
@@ -56,3 +60,4 @@ export interface TarjetaCredito {
   url: string;
   slug: string;
 }
+
