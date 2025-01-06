@@ -31,7 +31,7 @@ const schemaData = {
 ---
 
 {/* Mobile Back Link */}
-<nav class={`md:hidden max-w-7xl mx-auto px-4 py-4 ${textColor}`} aria-label="Back">
+<nav class={`md:hidden max-w-6xl mx-auto px-4 py-4 ${textColor}`} aria-label="Back">
   {previousPage && (
     <a href={previousPage.href} class="flex items-center gap-1">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -43,7 +43,7 @@ const schemaData = {
 </nav>
 
 {/* Desktop Breadcrumb */}
-<nav class="hidden md:block max-w-7xl mx-auto px-4 py-4" aria-label="Breadcrumb">
+<nav class="hidden md:block max-w-6xl mx-auto px-4 py-4" aria-label="Breadcrumb">
   <ol class="flex items-center space-x-2 text-sm">
     {items.map((item, index) => (
       <li class="flex items-center">
