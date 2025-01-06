@@ -3,7 +3,7 @@ import type { Asset, BaseEntry } from './base';
 import type { IBanco } from './banco';
 
 // Define Brand type
-export type Brand = 'Visa' | 'Mastercard';
+export type Brand = 'Visa' | 'Mastercard' | 'AmericanExpress';
 
 // Define Category type
 export type Category = 'Viajes' | 'Estudiantes' | 'Cashback' | 'Sin comisión' | 'Negocios' | 'Fidelización';

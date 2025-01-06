@@ -18,7 +18,6 @@ export function MobileFilterDrawer({ categories, brands, banks }: MobileFilterDr
   useEffect(() => {
     const handleOpen = () => {
       setIsOpen(true);
-      // Trigger animation after drawer is mounted
       requestAnimationFrame(() => {
         setIsVisible(true);
       });
@@ -26,10 +25,9 @@ export function MobileFilterDrawer({ categories, brands, banks }: MobileFilterDr
 
     const handleClose = () => {
       setIsVisible(false);
-      // Wait for animation to complete before unmounting
       setTimeout(() => {
         setIsOpen(false);
-      }, 300); // Match transition duration
+      }, 300);
     };
 
     document.addEventListener('open-mobile-filters', handleOpen);
@@ -52,7 +50,7 @@ export function MobileFilterDrawer({ categories, brands, banks }: MobileFilterDr
 
   return (
     <div className="md:hidden fixed inset-0 z-50">
-      {/* Backdrop with fade */}
+      {/* Backdrop */}
       <div 
         className={`absolute inset-0 bg-black transition-opacity duration-300 ease-in-out ${
           isVisible ? 'opacity-25' : 'opacity-0'
@@ -60,7 +58,7 @@ export function MobileFilterDrawer({ categories, brands, banks }: MobileFilterDr
         onClick={closeDrawer}
       />
       
-      {/* Drawer with slide */}
+      {/* Drawer */}
       <div 
         className={`absolute inset-x-0 bottom-0 transform transition-transform duration-300 ease-in-out ${
           isVisible ? 'translate-y-0' : 'translate-y-full'
@@ -72,8 +70,8 @@ export function MobileFilterDrawer({ categories, brands, banks }: MobileFilterDr
         </div>
         
         {/* Content */}
-        <div className="px-4 pb-8 space-y-6">
-          <div className="flex items-center justify-between">
+        <div className="px-4 pb-8">
+          <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-gray-900">Filtros</h3>
             <button
               onClick={closeDrawer}
@@ -87,20 +85,19 @@ export function MobileFilterDrawer({ categories, brands, banks }: MobileFilterDr
 
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Categoría
-              </label>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Mejor para</h3>
               <CategoryFilter categories={categories} />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Marca
-              </label>
-              <BrandFilter brands={brands} />
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Compañía</h3>
+              <BankFilter banks={banks} />
             </div>
 
-            <BankFilter banks={banks} />
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Marca</h3>
+              <BrandFilter brands={brands} />
+            </div>
 
             <div className="pt-4">
               <ClearFilters />

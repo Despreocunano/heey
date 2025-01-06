@@ -8,7 +8,9 @@ const { brand, className = "h-2" } = Astro.props;
 
 const logoPath = brand.toLowerCase() === 'visa' 
   ? '/images/visa-logo.svg'
-  : '/images/mastercard-logo.svg';
+  : brand.toLowerCase() === 'mastercard'
+  ? '/images/mastercard-logo.svg'
+  : '/images/amex-logo.svg';
 ---
 
 <img 

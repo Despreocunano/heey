@@ -38,16 +38,16 @@ export function BrandFilter({ brands }: BrandFilterProps) {
         <button
           key={brand}
           onClick={() => handleBrandChange(brand)}
-          className={`px-6 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
+          className={`px-6 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
             selectedBrand === brand
               ? 'bg-lime-600 text-white'
               : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
           }`}
         >
           <img 
-            src={`/images/${brand.toLowerCase()}-logo.svg`}
+            src={`/images/${brand.toLowerCase() === 'americanexpress' ? 'amex' : brand.toLowerCase()}-logo.svg`}
             alt={brand}
-            className="h-8"
+            className="h-6"
           />
         </button>
       ))}

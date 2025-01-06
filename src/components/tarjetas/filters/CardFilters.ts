@@ -1,22 +1,30 @@
 import { arrayIncludes, logFilterDebug, normalizeString } from './utils';
 
 export class CardFilters {
-  private cards: NodeListOf<Element>;
+  private cards: NodeListOf<Element> = document.querySelectorAll('[data-card-item]');
   private selectedCategory: string = '';
   private selectedBrand: string = '';
   private selectedBank: string = '';
-  private resultsContainer: HTMLElement | null;
-  private noResultsElement: HTMLElement | null;
+  private resultsContainer: HTMLElement | null = document.querySelector('#results-container');
+  private noResultsElement: HTMLElement | null = document.querySelector('#no-results');
   
   constructor() {
+    requestAnimationFrame(() => {
+      this.initialize();
+    });
+  }
+
+  private initialize(): void {
+    // Refresh DOM queries in case elements weren't ready during initial initialization
     this.cards = document.querySelectorAll('[data-card-item]');
     this.resultsContainer = document.querySelector('#results-container');
     this.noResultsElement = document.querySelector('#no-results');
-    this.init();
+    
+    this.setupEventListeners();
     this.restoreFilters();
   }
 
-  private init(): void {
+  private setupEventListeners(): void {
     document.addEventListener('filter-change', ((event: CustomEvent) => {
       if (event.detail?.type === 'categoria') {
         this.selectedCategory = event.detail.value;
@@ -47,6 +55,8 @@ export class CardFilters {
       this.filterCards();
     });
   }
+
+
 
   private restoreFilters(): void {
     const categoria = sessionStorage.getItem('filter-categoria');

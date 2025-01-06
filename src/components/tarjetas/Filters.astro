@@ -52,7 +52,15 @@ const marcas = [...new Set(tarjetas.flatMap(t => t.marca))].sort();
 
 <script>
   import { CardFilters } from './filters/CardFilters';
-  document.addEventListener('astro:page-load', () => {
+  
+  // Initialize filters immediately when script loads
+  const initFilters = () => {
     new CardFilters();
-  });
+  };
+
+  // Run on initial page load
+  initFilters();
+
+  // Also run on client-side navigation
+  document.addEventListener('astro:page-load', initFilters);
 </script>
