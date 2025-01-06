@@ -1,0 +1,111 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import TarjetaCard from '../../components/tarjetas/TarjetaCard.astro';
+import { getBancos, getTarjetas } from '../../lib/contentful';
+
+export async function getStaticPaths() {
+  const [bancos, tarjetas] = await Promise.all([
+    getBancos(),
+    getTarjetas()
+  ]);
+  
+  return bancos.map(banco => ({
+    params: { slug: banco.slug },
+    props: { 
+      banco,
+      tarjetas: tarjetas.filter(t => t.entidadBancaria.slug === banco.slug)
+    },
+  }));
+}
+
+const { banco, tarjetas } = Astro.props;
+
+const breadcrumb = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Bancos', href: '/banco' },
+  { label: banco.nombreBanco, href: `/banco/${banco.slug}`, current: true }
+];
+
+interface ContactCard {
+  label: string;
+  value: string;
+  href: string;
+}
+
+// Contact info cards data with proper typing
+const contactCards: ContactCard[] = [
+  banco.emergencias ? {
+    label: "Emergencias Bancarias",
+    value: banco.emergencias,
+    href: `tel:${banco.emergencias}`
+  } : null,
+  banco.emergenciasInternacionales ? {
+    label: "Emergencias Internacionales",
+    value: banco.emergenciasInternacionales,
+    href: `tel:${banco.emergenciasInternacionales}`
+  } : null,
+  banco.whatsapp ? {
+    label: "WhatsApp",
+    value: banco.whatsapp,
+    href: `https://wa.me/${banco.whatsapp.replace(/\D/g, '')}`
+  } : null
+].filter((card): card is ContactCard => card !== null);
+---
+
+<Layout breadcrumb={breadcrumb}>
+  <main class="bg-gray-50 min-h-screen">
+    <div class="bg-gradient-to-b from-white to-gray-50 border-b border-gray-200">
+      <div class="container mx-auto px-4">
+        <div class="max-w-7xl mx-auto py-8 md:py-12">
+          <!-- Bank Info Section -->
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+              <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <img 
+                  src={banco.logoBanco.url} 
+                  alt={banco.logoBanco.title}
+                  class="w-28 h-auto object-contain"
+                />
+              </div>
+              <div>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                  Tarjetas de {banco.nombreBanco}
+                </h1>
+                <p class="text-lg text-gray-600">
+                    {banco.nombreBanco} cuenta con {tarjetas.length} tarjeta{tarjetas.length === 1 ? '' : 's'} de crédito disponible{tarjetas.length === 1 ? '' : 's'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Info Cards -->
+          {contactCards.length > 0 && (
+            <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {contactCards.map((card) => (
+                <a 
+                  href={card.href}
+                  target={card.href.startsWith('https') ? '_blank' : undefined}
+                  rel={card.href.startsWith('https') ? 'noopener noreferrer' : undefined}
+                  class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:border-lime-200 transition-colors group"
+                >
+                  <p class="text-sm text-gray-600 mb-2">{card.label}</p>
+                  <span class="text-xl font-semibold text-lime-600 group-hover:text-lime-700 transition-colors">
+                    {card.value}
+                  </span>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        {tarjetas.map((tarjeta) => (
+          <TarjetaCard tarjeta={tarjeta} />
+        ))}
+      </div>
+    </div>
+  </main>
+</Layout>
