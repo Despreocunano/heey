@@ -11,6 +11,10 @@ const { tarjeta } = Astro.props;
 <a 
   href={`/tarjetas-de-credito/${tarjeta.slug}`}
   class="group block bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-gray-200 overflow-hidden"
+  data-card-item
+  data-categorias={tarjeta.categoria.join(',')}
+  data-banco={tarjeta.entidadBancaria.nombreBanco}
+  data-marcas={tarjeta.marca.join(',')}
 >
   <div class="relative">
     <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-8">

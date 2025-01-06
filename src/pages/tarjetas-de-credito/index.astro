@@ -2,15 +2,20 @@
 import Layout from '../../layouts/Layout.astro';
 import TarjetaCard from '../../components/tarjetas/TarjetaCard.astro';
 import TarjetaWelcome from '../../components/tarjetas/TarjetaWelcome.astro';
-import { getTarjetas } from '../../lib/contentful';
+import Filters from '../../components/tarjetas/Filters.astro';
+import { getTarjetas, getBancos } from '../../lib/contentful';
 
-const tarjetas = await getTarjetas();
+const [tarjetas, bancos] = await Promise.all([
+  getTarjetas(),
+  getBancos()
+]);
 ---
 
 <Layout>
   <TarjetaWelcome />
   <main class="container mx-auto px-4 py-8">
-    <h2 class="text-xl font-bold mb-8">Listado de Tarjetas de Crédito</h2>
+    <Filters tarjetas={tarjetas} bancos={bancos} />
+    
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {tarjetas.map((tarjeta) => (
         <TarjetaCard tarjeta={tarjeta} />
