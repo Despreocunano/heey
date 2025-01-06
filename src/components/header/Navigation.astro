@@ -15,5 +15,11 @@ const currentPath = Astro.url.pathname;
     >
       Tarjetas de Crédito
     </MenuItem>
+    <MenuItem 
+      href="/banco" 
+      current={currentPath.startsWith("/banco")}
+    >
+      Bancos
+    </MenuItem>
   </ul>
 </nav>
