@@ -36,7 +36,7 @@ export function BankFilter({ banks }: BankFilterProps) {
           onClick={() => handleBankChange('')}
           className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
             selectedBank === ''
-              ? 'bg-lime-600 text-white'
+              ? 'bg-red-600 text-white'
               : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
           }`}
         >
@@ -48,7 +48,7 @@ export function BankFilter({ banks }: BankFilterProps) {
             onClick={() => handleBankChange(bank.nombreBanco)}
             className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               selectedBank === bank.nombreBanco
-                ? 'bg-lime-600 text-white'
+                ? 'bg-red-600 text-white'
                 : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
             }`}
           >
