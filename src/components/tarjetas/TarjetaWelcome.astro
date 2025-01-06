@@ -1,29 +1,40 @@
 ---
 import Card from './Card.astro';
+import Breadcrumb from '../Breadcrumb.astro';
 
-// Lista de tarjetas con sus datos
+interface Props {
+  breadcrumb?: {
+    label: string;
+    href: string;
+    current?: boolean;
+  }[];
+}
+
+const { breadcrumb } = Astro.props;
+
 const cards = [
   {
-    image: 'https://via.placeholder.com/40', // Reemplaza con la URL de tu imagen
+    image: 'https://via.placeholder.com/40',
     title: 'Mejores tarjetas',
   },
   {
-    image: 'https://via.placeholder.com/40', // Reemplaza con la URL de tu imagen
+    image: 'https://via.placeholder.com/40',
     title: 'CardMatch™',
   },
   {
-    image: 'https://via.placeholder.com/40', // Reemplaza con la URL de tu imagen
+    image: 'https://via.placeholder.com/40',
     title: 'Mejores beneficios',
   },
   {
-    image: 'https://via.placeholder.com/40', // Reemplaza con la URL de tu imagen
+    image: 'https://via.placeholder.com/40',
     title: 'Sin costo anual',
   },
 ];
 ---
 
-<section class="bg-lime-600 text-white py-8">
-  <div class="container mx-auto px-4 text-center">
+<section class="bg-lime-600 text-white">
+  {breadcrumb && <Breadcrumb items={breadcrumb} textColor="text-white" />}
+  <div class="container mx-auto px-4 text-center py-8">
     <!-- Mensaje superior -->
     <div class="bg-lime-800 text-sm py-2 px-4 rounded-full inline-block mb-6">
       ¿Buscando una tarjeta de crédito? Mira los ganadores de nuestro ranking 2025
@@ -32,16 +43,14 @@ const cards = [
     <!-- Título y subtítulo -->
     <h1 class="text-3xl md:text-4xl font-bold mb-4">Tarjetas de Crédito</h1>
     <p class="text-base md:text-lg font-light">
-        Compara las mejoras tarjetas por categoría. Lee las recomendaciones y opiniones de nuestros expertos.
+      Compara las mejoras tarjetas por categoría. Lee las recomendaciones y opiniones de nuestros expertos.
     </p>
     <p class="text-base md:text-lg font-light mb-8">
-  Siéntete seguro de que tomarás la mejor decisión.
+      Siéntete seguro de que tomarás la mejor decisión.
     </p>
 
     <!-- Contenedor para las cards -->
-    <div
-      class="flex gap-4 overflow-x-auto px-6 py-4 scrollbar-hide md:overflow-x-hidden md:justify-center md:flex-wrap"
-    >
+    <div class="flex gap-4 overflow-x-auto px-6 py-4 scrollbar-hide md:overflow-x-hidden md:justify-center md:flex-wrap">
       {cards.map((card) => (
         <Card image={card.image} title={card.title} />
       ))}
@@ -50,12 +59,11 @@ const cards = [
 </section>
 
 <style is:inline>
-  /* Ocultar scrollbar */
-.scrollbar-hide {
-  -ms-overflow-style: none; /* IE y Edge */
-  scrollbar-width: none; /* Firefox */
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari y Opera */
-}
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 </style>

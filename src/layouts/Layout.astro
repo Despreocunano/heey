@@ -1,28 +1,41 @@
 ---
 import Header from '../components/header/Header.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  breadcrumb?: {
+    label: string;
+    href: string;
+    current?: boolean;
+  }[];
+}
+
+const { breadcrumb } = Astro.props;
+const showBreadcrumb = breadcrumb && Astro.url.pathname !== '/';
 ---
 
 <!doctype html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>Heey!</title>
-		<ClientRouter />
-	</head>
-	<body>
-		<Header />
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Heey!</title>
+    <ClientRouter />
+  </head>
+  <body>
+    <Header />
+    {showBreadcrumb && <Breadcrumb items={breadcrumb} />}
+    <slot />
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 </style>

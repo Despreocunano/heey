@@ -13,9 +13,15 @@ export async function getStaticPaths() {
 }
 
 const { tarjeta } = Astro.props;
+
+const breadcrumb = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Tarjetas de Crédito', href: '/tarjetas-de-credito' },
+  { label: tarjeta.nombre, href: `/tarjetas-de-credito/${tarjeta.slug}`, current: true }
+];
 ---
 
-<Layout>
+<Layout breadcrumb={breadcrumb}>
   <main class="container mx-auto px-4">
     <div class="max-w-6xl mx-auto">
       <TarjetaDetail tarjeta={tarjeta} />
