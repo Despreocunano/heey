@@ -25,10 +25,11 @@ function formatWhatsAppUrl(number: string) {
   )}
 
   <!-- Pros y Contras -->
-  {(tarjeta.pros?.length > 0 || tarjeta.contras?.length > 0) && (
-    <ProsCons pros={tarjeta.pros} contras={tarjeta.contras} />
+  {((tarjeta.pros && tarjeta.pros.length > 0) || (tarjeta.contras && tarjeta.contras.length > 0)) && (
+    <ProsCons pros={tarjeta.pros || []} contras={tarjeta.contras || []} />
   )}
 
+  <!-- Rest of the component remains the same -->
   <!-- Requisitos -->
   <div class="bg-white rounded-lg shadow-md p-6">
     <h2 class="text-xl font-semibold text-lime-700 mb-4">Requisitos tarjeta de crédito {tarjeta.nombre}:</h2>
@@ -38,7 +39,6 @@ function formatWhatsAppUrl(number: string) {
     />
   </div>
 
-  <!-- Rest of the existing content... -->
   <!-- Categorías -->
   <div class="bg-white rounded-lg shadow-md p-6">
     <h2 class="text-xl font-semibold text-lime-700 mb-4">Características:</h2>

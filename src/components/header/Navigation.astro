@@ -1,0 +1,19 @@
+---
+import MenuItem from './MenuItem.astro';
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav class="hidden md:flex space-x-2">
+  <ul class="flex space-x-2">
+    <MenuItem href="/" current={currentPath === "/"}>
+      Inicio
+    </MenuItem>
+    <MenuItem 
+      href="/tarjetas-de-credito" 
+      current={currentPath.startsWith("/tarjetas-de-credito")}
+    >
+      Tarjetas de Crédito
+    </MenuItem>
+  </ul>
+</nav>

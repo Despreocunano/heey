@@ -1,0 +1,152 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<div class="md:hidden">
+  <button
+    type="button"
+    class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-lime-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-lime-500"
+    aria-expanded="false"
+  >
+    <span class="sr-only">Abrir menú principal</span>
+    <svg
+      class="block h-6 w-6"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16"
+      />
+    </svg>
+  </button>
+</div>
+
+<!-- Mobile menu portal target -->
+<div id="mobile-menu-portal"></div>
+
+<template id="mobile-menu-template">
+  <div class="mobile-menu fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-gray-600 bg-opacity-75"></div>
+    <div class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-xl">
+      <div class="flex items-center justify-between p-4 border-b border-gray-200">
+        <h2 class="text-lg font-medium text-gray-900">Menú</h2>
+        <button
+          type="button"
+          class="mobile-menu-close rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-500"
+        >
+          <span class="sr-only">Cerrar menú</span>
+          <svg
+            class="h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+      <nav class="px-4 py-6 space-y-2">
+        <a 
+          href="/" 
+          class="mobile-menu-link block px-4 py-2 text-base font-medium text-gray-700 hover:text-lime-700 hover:bg-gray-50 rounded-md"
+          data-path="/"
+        >
+          Inicio
+        </a>
+        <a 
+          href="/tarjetas-de-credito" 
+          class="mobile-menu-link block px-4 py-2 text-base font-medium text-gray-700 hover:text-lime-700 hover:bg-gray-50 rounded-md"
+          data-path="/tarjetas-de-credito"
+        >
+          Tarjetas de Crédito
+        </a>
+      </nav>
+    </div>
+  </div>
+</template>
+
+<script>
+    class MobileMenu {
+      private buttonElement: HTMLElement | null;
+      private portalElement: HTMLElement | null;
+      private templateElement: HTMLTemplateElement | null;
+      private currentPath: string;
+  
+      constructor() {
+        this.buttonElement = document.querySelector('.mobile-menu-button');
+        this.portalElement = document.querySelector('#mobile-menu-portal');
+        this.templateElement = document.querySelector('#mobile-menu-template');
+        this.currentPath = window.location.pathname;
+        
+        this.init();
+      }
+  
+      private init(): void {
+        this.buttonElement?.addEventListener('click', () => this.open());
+        document.addEventListener('astro:page-load', () => {
+          this.currentPath = window.location.pathname;
+          this.updateActiveLinks();
+        });
+      }
+  
+      private open(): void {
+        const menu = this.templateElement?.content.cloneNode(true) as DocumentFragment;
+        const menuElement = menu.querySelector('.mobile-menu');
+        
+        if (menuElement) {
+          menuElement.querySelector('.mobile-menu-close')?.addEventListener('click', () => this.close());
+          menuElement.addEventListener('click', (e) => {
+            if (e.target === menuElement) this.close();
+          });
+  
+          menuElement.querySelectorAll('.mobile-menu-link').forEach(link => {
+            if (link instanceof HTMLElement) {
+              const path = link.dataset.path;
+              if (this.currentPath.startsWith(path || '')) {
+                link.classList.add('bg-lime-50', 'text-lime-700');
+              }
+            }
+          });
+  
+          this.portalElement?.appendChild(menuElement);
+        }
+      }
+  
+      private close(): void {
+        const menu = document.querySelector('.mobile-menu');
+        menu?.remove();
+      }
+  
+      private updateActiveLinks(): void {
+        const menu = document.querySelector('.mobile-menu');
+        if (!menu) return;
+  
+        menu.querySelectorAll('.mobile-menu-link').forEach(link => {
+          if (link instanceof HTMLElement) {
+            const path = link.dataset.path;
+            link.classList.remove('bg-lime-50', 'text-lime-700');
+            if (this.currentPath.startsWith(path || '')) {
+              link.classList.add('bg-lime-50', 'text-lime-700');
+            }
+          }
+        });
+      }
+    }
+  
+    // Initialize mobile menu
+    document.addEventListener('astro:page-load', () => {
+      new MobileMenu();
+    });
+  </script>
