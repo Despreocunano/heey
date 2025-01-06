@@ -84,7 +84,7 @@ export function MobileFilterDrawer({ categories, brands, banks }: MobileFilterDr
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Compañía</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Emisor</h3>
               <BankFilter banks={banks} />
             </div>
 
