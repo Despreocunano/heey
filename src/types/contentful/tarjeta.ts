@@ -1,23 +1,25 @@
 import type { EntryFields } from 'contentful';
 import type { Asset, BaseEntry } from './base';
 import type { IBanco } from './banco';
-import type { IBeneficio } from './beneficio';
 
 // Define Brand type
 export type Brand = 'Visa' | 'Mastercard';
+
+// Define Category type
+export type Category = 'Viajes' | 'Estudiantes' | 'Cashback' | 'Sin comisión' | 'Negocios' | 'Fidelización';
 
 // Contentful Entry Fields
 export interface ITarjetaCreditoFields {
   nombre: EntryFields.Symbol;
   imagenTarjeta: Asset;
+  emisor: Asset;
   entidadBancaria: IBanco;
   mantencion: EntryFields.Symbol;
   renta: EntryFields.Number;
   comisionInternacional?: EntryFields.Symbol;
   requisitos: EntryFields.Text;
-  marca: EntryFields.Symbol[];
-  categoria: EntryFields.Symbol[];
-  beneficios: IBeneficio[];
+  marca: Brand[];
+  categoria: Category[];
   ofertaDeBienvenida?: EntryFields.Symbol;
   pros?: EntryFields.Symbol[];
   contras?: EntryFields.Symbol[];
@@ -35,13 +37,13 @@ export interface TarjetaCredito {
     url: string;
     title: string;
   };
+  emisor: {
+    url: string;
+    title: string;
+  };
   entidadBancaria: {
     nombreBanco: string;
     logoBanco: {
-      url: string;
-      title: string;
-    };
-    emisor: {
       url: string;
       title: string;
     };
@@ -55,8 +57,7 @@ export interface TarjetaCredito {
   comisionInternacional?: string;
   requisitos: string;
   marca: Brand[];
-  categoria: ('Viajes' | 'Estudiantes' | 'Cashback' | 'Sin comisión' | 'Negocios' | 'Fidelización')[];
-  beneficios: any[]; // We'll type this properly when we have the beneficios type
+  categoria: Category[];
   ofertaDeBienvenida?: string;
   pros?: string[];
   contras?: string[];
