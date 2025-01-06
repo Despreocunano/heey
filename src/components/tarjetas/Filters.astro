@@ -4,6 +4,8 @@ import { CategoryFilter } from './filters/CategoryFilter';
 import { BrandFilter } from './filters/BrandFilter';
 import { BankFilter } from './filters/BankFilter';
 import { ClearFilters } from './filters/ClearFilters';
+import { MobileFilterButton } from './filters/MobileFilterButton';
+import { MobileFilterDrawer } from './filters/MobileFilterDrawer';
 
 interface Props {
   tarjetas: TarjetaCredito[];
@@ -19,30 +21,42 @@ const categorias = [...new Set(tarjetas.flatMap(t => t.categoria))].sort();
 const marcas = [...new Set(tarjetas.flatMap(t => t.marca))].sort();
 ---
 
-<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-  <h3 class="text-lg font-semibold text-gray-900 mb-4">Filtros</h3>
-  
-  <div class="space-y-6">
-    <!-- Categorías y Marcas -->
-    <div class="flex flex-wrap items-center gap-6">
-      <div class="flex-1 overflow-x-auto scrollbar-hide">
-        <CategoryFilter client:load categories={categorias} />
+<div>
+  {/* Desktop Filters */}
+  <div class="hidden md:block bg-white rounded-lg shadow-sm p-6 mb-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Filtros</h3>
+    
+    <div class="space-y-6">
+      {/* Categorías y Marcas */}
+      <div class="flex flex-wrap items-center gap-6">
+        <div class="flex-1 overflow-x-auto scrollbar-hide">
+          <CategoryFilter client:load categories={categorias} />
+        </div>
+        <div class="flex-shrink-0">
+          <BrandFilter client:load brands={marcas} />
+        </div>
       </div>
-      <div class="flex-shrink-0">
-        <BrandFilter client:load brands={marcas} />
-      </div>
-    </div>
 
-    <!-- Bancos y Limpiar Filtros -->
-    <div class="flex items-end justify-between gap-4">
-      <div class="flex-1">
-        <BankFilter client:load banks={bancos} />
-      </div>
-      <div class="flex-shrink-0">
-        <ClearFilters client:load />
+      {/* Bancos y Limpiar Filtros */}
+      <div class="flex items-end justify-between gap-4">
+        <div class="flex-1">
+          <BankFilter client:load banks={bancos} />
+        </div>
+        <div class="flex-shrink-0">
+          <ClearFilters client:load />
+        </div>
       </div>
     </div>
   </div>
+
+  {/* Mobile Filter Button & Drawer */}
+  <MobileFilterButton client:load />
+  <MobileFilterDrawer 
+    client:load 
+    categories={categorias}
+    brands={marcas}
+    banks={bancos}
+  />
 </div>
 
 <style>
