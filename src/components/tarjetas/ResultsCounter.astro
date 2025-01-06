@@ -8,7 +8,7 @@ const { total } = Astro.props;
 
 <h2 class="text-xl font-semibold text-gray-900 mb-6" id="results-counter">
   {total === 0 ? 'No se encontraron tarjetas' : 
-    `${total} tarjeta${total === 1 ? '' : 's'} disponible${total === 1 ? '' : 's'}`}
+    `Hay ${total} tarjeta${total === 1 ? '' : 's'} de crédito disponible${total === 1 ? '' : 's'}`}
 </h2>
 
 <script>
@@ -18,7 +18,7 @@ const { total } = Astro.props;
     if (counter) {
       const count = event.detail.count;
       counter.textContent = count === 0 ? 'No se encontraron tarjetas' :
-        `${count} tarjeta${count === 1 ? '' : 's'} disponible${count === 1 ? '' : 's'}`;
+        `Hay ${count} tarjeta${count === 1 ? '' : 's'} de crédito disponible${count === 1 ? '' : 's'}`;
     }
   };
 
