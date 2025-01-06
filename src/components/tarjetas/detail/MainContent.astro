@@ -52,7 +52,7 @@ function formatWhatsAppUrl(number: string) {
 
   <!-- Información del Banco -->
   <div class="bg-white rounded-lg shadow-md p-6">
-    <h2 class="text-xl font-semibold text-lime-700 mb-4">Sobre el Banco {tarjeta.entidadBancaria.nombreBanco}:</h2>
+    <h2 class="text-xl font-semibold text-lime-700 mb-4">{tarjeta.entidadBancaria.nombreBanco}:</h2>
     
     <div class="space-y-6">
       <!-- Logo del banco -->
@@ -74,7 +74,7 @@ function formatWhatsAppUrl(number: string) {
               </svg>
             </div>
             <div>
-              <p class="text-sm text-gray-600">Emergencias</p>
+              <p class="text-sm text-gray-600">Emergencias Bancarias</p>
               <a href={`tel:${tarjeta.entidadBancaria.emergencias}`} class="text-lime-600 font-semibold hover:text-lime-700">
                 {tarjeta.entidadBancaria.emergencias}
               </a>

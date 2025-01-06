@@ -12,7 +12,7 @@ const { tarjeta, mobile } = Astro.props;
 <div class:list={[
   { "sticky top-28": !mobile }
 ]}>
-  <div class="bg-white rounded-lg shadow-md p-6">
+  <div class="bg-white rounded-lg shadow-md p-6 text-center">
     <img 
       src={tarjeta.imagenTarjeta.url} 
       alt={tarjeta.imagenTarjeta.title}
@@ -46,5 +46,6 @@ const { tarjeta, mobile } = Astro.props;
     >
       Solicitar Tarjeta
     </a>
+    <span class="text-[10px] text-center text-gray-500">Serás sirigido al sitio web de {tarjeta.entidadBancaria.nombreBanco}</span>
   </div>
 </div>
