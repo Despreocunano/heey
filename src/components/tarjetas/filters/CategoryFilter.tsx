@@ -7,14 +7,6 @@ interface CategoryFilterProps {
 export function CategoryFilter({ categories }: CategoryFilterProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
 
-  // Move sessionStorage access to useEffect
-  useEffect(() => {
-    const savedCategory = sessionStorage.getItem('filter-categoria');
-    if (savedCategory) {
-      setSelectedCategory(savedCategory);
-    }
-  }, []);
-
   useEffect(() => {
     const handleReset = (event: CustomEvent) => {
       if (event.detail.type === 'categoria') {
@@ -27,19 +19,17 @@ export function CategoryFilter({ categories }: CategoryFilterProps) {
   }, []);
 
   const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-    sessionStorage.setItem('filter-categoria', category);
+    const newCategory = selectedCategory === category ? '' : category;
+    setSelectedCategory(newCategory);
     
     const event = new CustomEvent('filter-change', {
-      detail: { type: 'categoria', value: category }
+      detail: { type: 'categoria', value: newCategory }
     });
     document.dispatchEvent(event);
-
-    document.querySelector('[data-filter-categoria]')?.setAttribute('data-filter-categoria', category);
   };
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" data-filter-categoria={selectedCategory}>
+    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
       <button
         onClick={() => handleCategoryChange('')}
         className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${

@@ -8,14 +8,6 @@ interface BrandFilterProps {
 export function BrandFilter({ brands }: BrandFilterProps) {
   const [selectedBrand, setSelectedBrand] = useState('');
 
-  // Move sessionStorage access to useEffect
-  useEffect(() => {
-    const savedBrand = sessionStorage.getItem('filter-marca');
-    if (savedBrand) {
-      setSelectedBrand(savedBrand);
-    }
-  }, []);
-
   useEffect(() => {
     const handleReset = (event: CustomEvent) => {
       if (event.detail.type === 'marca') {
@@ -30,18 +22,15 @@ export function BrandFilter({ brands }: BrandFilterProps) {
   const handleBrandChange = (brand: string) => {
     const newBrand = selectedBrand === brand ? '' : brand;
     setSelectedBrand(newBrand);
-    sessionStorage.setItem('filter-marca', newBrand);
     
     const event = new CustomEvent('filter-change', {
       detail: { type: 'marca', value: newBrand }
     });
     document.dispatchEvent(event);
-
-    document.querySelector('[data-filter-marca]')?.setAttribute('data-filter-marca', newBrand);
   };
 
   return (
-    <div className="flex gap-2" data-filter-marca={selectedBrand}>
+    <div className="flex gap-2">
       {brands.map((brand) => (
         <button
           key={brand}

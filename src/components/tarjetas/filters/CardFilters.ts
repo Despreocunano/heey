@@ -7,7 +7,6 @@ export class CardFilters {
   private selectedBank: string = '';
   private resultsContainer: HTMLElement | null;
   private noResultsElement: HTMLElement | null;
-  private boundEventListeners: { [key: string]: EventListener } = {};
   
   constructor() {
     this.cards = document.querySelectorAll('[data-card-item]');
@@ -18,83 +17,32 @@ export class CardFilters {
 
   private initialize(): void {
     this.setupEventListeners();
-    this.restoreFilters();
     this.filterCards();
   }
 
   private setupEventListeners(): void {
-    this.boundEventListeners = {
-      filterChange: ((event: CustomEvent) => {
-        if (event.detail?.type === 'categoria') {
-          this.selectedCategory = event.detail.value;
-          sessionStorage.setItem('filter-categoria', event.detail.value);
-        } else if (event.detail?.type === 'marca') {
-          this.selectedBrand = event.detail.value;
-          sessionStorage.setItem('filter-marca', event.detail.value);
-        } else if (event.detail?.type === 'banco') {
-          this.selectedBank = event.detail.value;
-          sessionStorage.setItem('filter-banco', event.detail.value);
-        }
-        this.filterCards();
-      }) as EventListener,
+    document.addEventListener('filter-change', ((event: CustomEvent) => {
+      if (event.detail?.type === 'categoria') {
+        this.selectedCategory = event.detail.value;
+      } else if (event.detail?.type === 'marca') {
+        this.selectedBrand = event.detail.value;
+      } else if (event.detail?.type === 'banco') {
+        this.selectedBank = event.detail.value;
+      }
+      this.filterCards();
+    }) as EventListener);
 
-      clearFilters: (() => {
-        this.selectedCategory = '';
-        this.selectedBrand = '';
-        this.selectedBank = '';
-        
-        sessionStorage.removeItem('filter-categoria');
-        sessionStorage.removeItem('filter-marca');
-        sessionStorage.removeItem('filter-banco');
-        
-        ['categoria', 'marca', 'banco'].forEach(type => {
-          document.dispatchEvent(new CustomEvent('filter-reset', { detail: { type } }));
-        });
-        
-        this.filterCards();
-      }) as EventListener,
-
-      cleanup: (() => {
-        this.cleanup();
-      }) as EventListener
-    };
-
-    document.addEventListener('filter-change', this.boundEventListeners.filterChange);
-    document.addEventListener('clear-filters', this.boundEventListeners.clearFilters);
-    document.addEventListener('astro:before-preparation', this.boundEventListeners.cleanup);
-  }
-
-  private cleanup(): void {
-    document.removeEventListener('filter-change', this.boundEventListeners.filterChange);
-    document.removeEventListener('clear-filters', this.boundEventListeners.clearFilters);
-    document.removeEventListener('astro:before-preparation', this.boundEventListeners.cleanup);
-  }
-
-  private restoreFilters(): void {
-    const categoria = sessionStorage.getItem('filter-categoria');
-    const marca = sessionStorage.getItem('filter-marca');
-    const banco = sessionStorage.getItem('filter-banco');
-
-    if (categoria) {
-      this.selectedCategory = categoria;
-      document.dispatchEvent(new CustomEvent('filter-change', {
-        detail: { type: 'categoria', value: categoria }
-      }));
-    }
-
-    if (marca) {
-      this.selectedBrand = marca;
-      document.dispatchEvent(new CustomEvent('filter-change', {
-        detail: { type: 'marca', value: marca }
-      }));
-    }
-
-    if (banco) {
-      this.selectedBank = banco;
-      document.dispatchEvent(new CustomEvent('filter-change', {
-        detail: { type: 'banco', value: banco }
-      }));
-    }
+    document.addEventListener('clear-filters', () => {
+      this.selectedCategory = '';
+      this.selectedBrand = '';
+      this.selectedBank = '';
+      
+      ['categoria', 'marca', 'banco'].forEach(type => {
+        document.dispatchEvent(new CustomEvent('filter-reset', { detail: { type } }));
+      });
+      
+      this.filterCards();
+    });
   }
 
   private getFilters(): Record<string, string> {
