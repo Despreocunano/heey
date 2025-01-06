@@ -12,15 +12,23 @@ const { total } = Astro.props;
 </h2>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
+  const initCounter = () => {
     const counter = document.getElementById('results-counter');
     
-    document.addEventListener('update-counter', (event: any) => {
+    const updateCount = (event: CustomEvent) => {
       if (counter) {
         const count = event.detail.count;
         counter.textContent = count === 0 ? 'No se encontraron tarjetas' :
           `${count} tarjeta${count === 1 ? '' : 's'} disponible${count === 1 ? '' : 's'}`;
       }
-    });
-  });
+    };
+
+    document.addEventListener('update-counter', updateCount as EventListener);
+  };
+
+  // Run on initial page load
+  initCounter();
+
+  // Also run on client-side navigation
+  document.addEventListener('astro:page-load', initCounter);
 </script>
