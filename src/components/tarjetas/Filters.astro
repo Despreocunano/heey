@@ -24,11 +24,11 @@ const marcas = [...new Set(tarjetas.flatMap(t => t.marca))].sort();
     {/* Categories and Banks */}
     <div class="grid grid-cols-2 gap-6">
       <div class="space-y-2">
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">Mejor para</h3>
+        <h3 class="text-sm font-semibold text-gray-900 mb-2">Mejor para:</h3>
         <CategoryFilter client:load categories={categorias} />
       </div>
       <div class="space-y-2">
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">Compañia</h3>
+        <h3 class="text-sm font-semibold text-gray-900 mb-2">Compañia:</h3>
         <BankFilter client:load banks={bancos} />
       </div>
     </div>
