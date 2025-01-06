@@ -9,6 +9,7 @@ export class CardFilters {
   constructor() {
     this.cards = document.querySelectorAll('[data-card-item]');
     this.init();
+    this.restoreFilters();
   }
 
   private init(): void {
@@ -16,10 +17,13 @@ export class CardFilters {
     document.addEventListener('filter-change', ((event: CustomEvent) => {
       if (event.detail.type === 'categoria') {
         this.selectedCategory = event.detail.value;
+        sessionStorage.setItem('filter-categoria', event.detail.value);
       } else if (event.detail.type === 'marca') {
         this.selectedBrand = event.detail.value;
+        sessionStorage.setItem('filter-marca', event.detail.value);
       } else if (event.detail.type === 'banco') {
         this.selectedBank = event.detail.value;
+        sessionStorage.setItem('filter-banco', event.detail.value);
       }
       this.filterCards();
     }) as EventListener);
@@ -30,6 +34,11 @@ export class CardFilters {
       this.selectedBrand = '';
       this.selectedBank = '';
       
+      // Limpiar sessionStorage
+      sessionStorage.removeItem('filter-categoria');
+      sessionStorage.removeItem('filter-marca');
+      sessionStorage.removeItem('filter-banco');
+      
       // Disparar eventos para actualizar UI
       ['categoria', 'marca', 'banco'].forEach(type => {
         const event = new CustomEvent('filter-reset', { detail: { type } });
@@ -38,6 +47,39 @@ export class CardFilters {
       
       this.filterCards();
     });
+  }
+
+  private restoreFilters(): void {
+    // Restaurar filtros desde sessionStorage
+    const categoria = sessionStorage.getItem('filter-categoria');
+    const marca = sessionStorage.getItem('filter-marca');
+    const banco = sessionStorage.getItem('filter-banco');
+
+    if (categoria) {
+      this.selectedCategory = categoria;
+      document.dispatchEvent(new CustomEvent('filter-change', {
+        detail: { type: 'categoria', value: categoria }
+      }));
+    }
+
+    if (marca) {
+      this.selectedBrand = marca;
+      document.dispatchEvent(new CustomEvent('filter-change', {
+        detail: { type: 'marca', value: marca }
+      }));
+    }
+
+    if (banco) {
+      this.selectedBank = banco;
+      document.dispatchEvent(new CustomEvent('filter-change', {
+        detail: { type: 'banco', value: banco }
+      }));
+    }
+
+    // Si hay algún filtro activo, aplicar filtros
+    if (categoria || marca || banco) {
+      this.filterCards();
+    }
   }
 
   private getFilters(): Record<string, string> {
@@ -77,5 +119,8 @@ export class CardFilters {
 
       card.style.display = isVisible ? 'block' : 'none';
     });
+
+    // Disparar evento para actualizar contador
+    document.dispatchEvent(new CustomEvent('filter-change'));
   }
 }
