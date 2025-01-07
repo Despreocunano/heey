@@ -1,13 +1,19 @@
 import { client } from '../client';
+import { cache } from '../cache';
 import type { ITarjetaCreditoFields, TarjetaCredito } from '../../../types/contentful';
 
 export async function getTarjetas(): Promise<TarjetaCredito[]> {
+  // Check cache first
+  const cached = cache.get<TarjetaCredito[]>('tarjetas');
+  if (cached) return cached;
+
   const response = await client.getEntries<ITarjetaCreditoFields>({
     content_type: 'tarjetaDeCredito',
     include: 2,
+    limit: 1000, // Fetch maximum items per request
   });
   
-  return response.items.map(item => ({
+  const tarjetas = response.items.map(item => ({
     ...item.fields,
     entidadBancaria: {
       ...item.fields.entidadBancaria.fields,
@@ -25,13 +31,23 @@ export async function getTarjetas(): Promise<TarjetaCredito[]> {
       title: item.fields.emisor.fields.title,
     },
   }));
+
+  // Save to cache
+  cache.set('tarjetas', tarjetas);
+  
+  return tarjetas;
 }
 
 export async function getTarjetaBySlug(slug: string): Promise<TarjetaCredito | null> {
+  // Check cache first
+  const cached = cache.get<TarjetaCredito>(`tarjeta-${slug}`);
+  if (cached) return cached;
+
   const response = await client.getEntries<ITarjetaCreditoFields>({
     content_type: 'tarjetaDeCredito',
     'fields.slug': slug,
     include: 2,
+    limit: 1,
   });
 
   if (!response.items.length) {
@@ -39,7 +55,7 @@ export async function getTarjetaBySlug(slug: string): Promise<TarjetaCredito | n
   }
 
   const item = response.items[0];
-  return {
+  const tarjeta = {
     ...item.fields,
     entidadBancaria: {
       ...item.fields.entidadBancaria.fields,
@@ -57,4 +73,9 @@ export async function getTarjetaBySlug(slug: string): Promise<TarjetaCredito | n
       title: item.fields.emisor.fields.title,
     },
   };
+
+  // Save to cache
+  cache.set(`tarjeta-${slug}`, tarjeta);
+
+  return tarjeta;
 }
