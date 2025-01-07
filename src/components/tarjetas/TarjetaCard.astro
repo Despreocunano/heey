@@ -32,7 +32,7 @@ const { tarjeta } = Astro.props;
           alt={tarjeta.entidadBancaria.logoBanco.title}
           class="h-4 w-auto object-contain mb-2"
         />
-        <h2 class="text-lg font-semibold text-gray-900 group-hover:text-red-600 transition-colors leading-tight">
+        <h2 class="card-title text-lg font-semibold text-gray-900 group-hover:text-red-600 transition-colors leading-tight w-full whitespace-nowrap">
           {tarjeta.nombre}
         </h2>
       </div>
@@ -57,3 +57,34 @@ const { tarjeta } = Astro.props;
     </div>
   </div>
 </a>
+
+<script>
+  function fitText() {
+    const titles = document.querySelectorAll('.card-title');
+    titles.forEach(title => {
+      const htmlTitle = title as HTMLElement;
+      const container = htmlTitle.parentElement;
+      if (!container) return;
+
+      const maxWidth = container.offsetWidth;
+      let fontSize = 18; // Starting font size (1.125rem = 18px)
+      
+      htmlTitle.style.fontSize = `${fontSize}px`;
+      while (htmlTitle.scrollWidth > maxWidth && fontSize > 12) {
+        fontSize--;
+        htmlTitle.style.fontSize = `${fontSize}px`;
+      }
+    });
+  }
+
+  // Run on load and resize
+  window.addEventListener('load', fitText);
+  window.addEventListener('resize', fitText);
+
+  // Run when new cards might be added/removed (for filters)
+  const observer = new MutationObserver(fitText);
+  observer.observe(document.body, { 
+    childList: true, 
+    subtree: true 
+  });
+</script>

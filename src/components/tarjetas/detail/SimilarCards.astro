@@ -9,24 +9,65 @@ interface Props {
 
 const { currentTarjeta, tarjetas } = Astro.props;
 
-// Filtrar tarjetas del mismo banco, excluyendo la actual
-const similarCards = tarjetas
-  .filter(t => 
-    t.entidadBancaria.slug === currentTarjeta.entidadBancaria.slug && 
-    t.slug !== currentTarjeta.slug
-  )
-  .slice(0, 3); // Limitar a 4 tarjetas máximo
+const MIN_CARDS = 5;
+
+// Primero obtenemos tarjetas del mismo banco
+const sameBankCards = tarjetas.filter(t => 
+  t.entidadBancaria.slug === currentTarjeta.entidadBancaria.slug && 
+  t.slug !== currentTarjeta.slug
+);
+
+// Si no hay suficientes tarjetas del mismo banco, buscamos otras tarjetas similares
+let additionalCards: TarjetaCredito[] = [];
+if (sameBankCards.length < MIN_CARDS) {
+  const remainingNeeded = MIN_CARDS - sameBankCards.length;
+  
+  const otherCards = tarjetas
+    .filter(t => 
+      t.slug !== currentTarjeta.slug && 
+      !sameBankCards.some(sc => sc.slug === t.slug)
+    )
+    .map(card => ({
+      card,
+      score: card.categoria.filter(cat => 
+        currentTarjeta.categoria.includes(cat)
+      ).length
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, remainingNeeded)
+    .map(item => item.card);
+
+  additionalCards = otherCards;
+}
+
+const similarCards = [...sameBankCards, ...additionalCards];
 ---
 
 {similarCards.length > 0 && (
   <section class="mt-8 bg-white rounded-lg shadow-md p-6">
     <h2 class="text-xl font-semibold text-red-600 mb-6">
-      Otras tarjetas de {currentTarjeta.entidadBancaria.nombreBanco}
+      {sameBankCards.length > 0 
+        ? `Otras tarjetas de ${currentTarjeta.entidadBancaria.nombreBanco}`
+        : 'Tarjetas similares que te pueden interesar'}
     </h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {similarCards.map((tarjeta) => (
-        <TarjetaCard tarjeta={tarjeta} />
-      ))}
+    <div class="relative">
+      <div class="flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
+        {similarCards.map((tarjeta) => (
+          <div class="flex-none w-[280px] first:pl-0 last:pr-6 md:last:pr-0">
+            <TarjetaCard tarjeta={tarjeta} />
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 )}
+
+<style is:inline>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>

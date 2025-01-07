@@ -33,7 +33,9 @@ const showBreadcrumb = breadcrumb && Astro.url.pathname !== '/';
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />
-    {showBreadcrumb && <Breadcrumb items={breadcrumb} />}
+    <div class="w-full">
+      {showBreadcrumb && <Breadcrumb items={breadcrumb} />}
+    </div>
     <slot />
     <Footer />
   </body>
