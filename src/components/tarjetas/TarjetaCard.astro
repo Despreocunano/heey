@@ -51,7 +51,7 @@ const { tarjeta } = Astro.props;
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
           </svg>
-          <span>Renta mínima: ${tarjeta.renta.toLocaleString('es-CL')}</span>
+          <span>Renta mínima: {tarjeta.renta === 0 ? "No informada" : `$${tarjeta.renta.toLocaleString('es-CL')}`}</span>
         </div>
       </div>
     </div>

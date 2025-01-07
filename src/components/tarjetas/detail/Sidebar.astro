@@ -28,7 +28,7 @@ const { tarjeta, mobile } = Astro.props;
       </div>
       <div class="flex justify-between items-center">
         <span class="text-gray-600">Renta Mínima</span>
-        <span class="font-medium">${tarjeta.renta.toLocaleString('es-CL')}</span>
+        <span class="font-medium">{tarjeta.renta === 0 ? "No informada" : `$${tarjeta.renta.toLocaleString('es-CL')}`}</span>
       </div>
       {tarjeta.comisionInternacional && (
         <div class="flex justify-between items-center">
