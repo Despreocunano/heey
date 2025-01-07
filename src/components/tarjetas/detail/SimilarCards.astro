@@ -44,7 +44,7 @@ const similarCards = [...sameBankCards, ...additionalCards];
 ---
 
 {similarCards.length > 0 && (
-  <section class="mt-8 bg-white rounded-lg shadow-md p-6">
+  <section class="mt-8 bg-white rounded-lg shadow-md p-6 mb-8">
     <h2 class="text-xl font-semibold text-red-600 mb-6">
       {sameBankCards.length > 0 
         ? `Otras tarjetas de ${currentTarjeta.entidadBancaria.nombreBanco}`
@@ -53,7 +53,7 @@ const similarCards = [...sameBankCards, ...additionalCards];
     <div class="relative">
       <div class="flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
         {similarCards.map((tarjeta) => (
-          <div class="flex-none w-[280px] first:pl-0 last:pr-6 md:last:pr-0">
+          <div class="flex-none w-[320px] first:pl-0 last:pr-6 md:last:pr-0">
             <TarjetaCard tarjeta={tarjeta} />
           </div>
         ))}
