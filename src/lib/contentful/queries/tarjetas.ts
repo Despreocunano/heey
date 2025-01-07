@@ -11,6 +11,24 @@ export async function getTarjetas(): Promise<TarjetaCredito[]> {
     content_type: 'tarjetaDeCredito',
     include: 2,
     limit: 1000, // Fetch maximum items per request
+    select: [
+      'fields.nombre',
+      'fields.imagenTarjeta',
+      'fields.emisor',
+      'fields.entidadBancaria',
+      'fields.mantencion',
+      'fields.renta',
+      'fields.comisionInternacional',
+      'fields.requisitos',
+      'fields.beneficios',
+      'fields.marca',
+      'fields.categoria',
+      'fields.ofertaDeBienvenida',
+      'fields.pros',
+      'fields.contras',
+      'fields.url',
+      'fields.slug'
+    ]
   });
   
   const tarjetas = response.items.map(item => ({
@@ -48,6 +66,24 @@ export async function getTarjetaBySlug(slug: string): Promise<TarjetaCredito | n
     'fields.slug': slug,
     include: 2,
     limit: 1,
+    select: [
+      'fields.nombre',
+      'fields.imagenTarjeta',
+      'fields.emisor',
+      'fields.entidadBancaria',
+      'fields.mantencion',
+      'fields.renta',
+      'fields.comisionInternacional',
+      'fields.requisitos',
+      'fields.beneficios',
+      'fields.marca',
+      'fields.categoria',
+      'fields.ofertaDeBienvenida',
+      'fields.pros',
+      'fields.contras',
+      'fields.url',
+      'fields.slug'
+    ]
   });
 
   if (!response.items.length) {

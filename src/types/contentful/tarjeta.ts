@@ -6,7 +6,7 @@ import type { IBanco } from './banco';
 export type Brand = 'Visa' | 'Mastercard' | 'AmericanExpress';
 
 // Define Category type
-export type Category = 'Viajes' | 'Estudiantes' | 'Cashback' | 'Sin comisión' | 'Negocios' | 'Fidelización';
+export type Category = 'Viajes' | 'Estudiantes' | 'Cashback' | 'Negocios' | 'Acumulación de puntos' | 'Supermercado' | 'Sin comisión internacional';
 
 // Contentful Entry Fields
 export interface ITarjetaCreditoFields {
@@ -18,6 +18,7 @@ export interface ITarjetaCreditoFields {
   renta: EntryFields.Number;
   comisionInternacional?: EntryFields.Symbol;
   requisitos: EntryFields.Text;
+  beneficios?: EntryFields.Text;
   marca: Brand[];
   categoria: Category[];
   ofertaDeBienvenida?: EntryFields.Symbol;
@@ -56,6 +57,7 @@ export interface TarjetaCredito {
   renta: number;
   comisionInternacional?: string;
   requisitos: string;
+  beneficios?: string;
   marca: Brand[];
   categoria: Category[];
   ofertaDeBienvenida?: string;

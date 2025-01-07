@@ -10,6 +10,7 @@ interface Props {
 
 const { tarjeta } = Astro.props;
 const requisitosHtml = marked(tarjeta.requisitos);
+const beneficiosHtml = tarjeta.beneficios ? marked(tarjeta.beneficios) : null;
 
 // Function to format WhatsApp number for URL
 function formatWhatsAppUrl(number: string) {
@@ -37,6 +38,17 @@ function formatWhatsAppUrl(number: string) {
       set:html={requisitosHtml}
     />
   </div>
+
+  <!-- Beneficios -->
+  {beneficiosHtml && (
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold text-red-600 mb-4">Beneficios:</h2>
+      <div 
+        class="prose prose-gray max-w-none prose-headings:text-gray-900 prose-headings:font-semibold prose-p:text-gray-600 prose-li:text-gray-600 prose-strong:text-gray-900"
+        set:html={beneficiosHtml}
+      />
+    </div>
+  )}
 
   <!-- Categorías -->
   <div class="bg-white rounded-lg shadow-md p-6">

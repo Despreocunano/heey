@@ -37,7 +37,7 @@ export function BrandFilter({ brands }: BrandFilterProps) {
           onClick={() => handleBrandChange(brand)}
           className={`px-6 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
             selectedBrand === brand
-              ? 'bg-red-600 text-white'
+              ? 'bg-gray-200 text-white'
               : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
           }`}
         >
