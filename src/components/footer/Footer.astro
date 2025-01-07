@@ -1,0 +1,61 @@
+---
+import Logo from '../header/Logo.astro';
+
+const currentYear = new Date().getFullYear();
+
+const links = [
+  {
+    title: "Productos",
+    items: [
+      { label: "Tarjetas de Crédito", href: "/tarjetas-de-credito" },
+      { label: "Bancos", href: "/banco" }
+    ]
+  },
+  {
+    title: "Legal",
+    items: [
+      { label: "Términos y Condiciones", href: "#" },
+      { label: "Política de Privacidad", href: "#" }
+    ]
+  }
+];
+---
+
+<footer class="bg-black text-white mt-auto">
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Logo y descripción -->
+      <div class="md:col-span-2">
+        <Logo />
+        <p class="mt-4 text-gray-400 text-sm">
+          Comparamos cientos de tarjetas de crédito para ayudarte a tomar la mejor decisión financiera.
+        </p>
+      </div>
+
+      <!-- Links -->
+      {links.map(section => (
+        <div>
+          <h3 class="font-semibold mb-4">{section.title}</h3>
+          <ul class="space-y-2">
+            {section.items.map(link => (
+              <li>
+                <a 
+                  href={link.href} 
+                  class="text-gray-400 hover:text-white transition-colors text-sm"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="border-t border-gray-800 mt-12 pt-8">
+      <p class="text-center text-gray-400 text-sm">
+        © {currentYear} Heey. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+</footer>

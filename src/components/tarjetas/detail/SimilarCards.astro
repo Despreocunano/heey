@@ -1,0 +1,32 @@
+---
+import type { TarjetaCredito } from '../../../types/contentful';
+import TarjetaCard from '../TarjetaCard.astro';
+
+interface Props {
+  currentTarjeta: TarjetaCredito;
+  tarjetas: TarjetaCredito[];
+}
+
+const { currentTarjeta, tarjetas } = Astro.props;
+
+// Filtrar tarjetas del mismo banco, excluyendo la actual
+const similarCards = tarjetas
+  .filter(t => 
+    t.entidadBancaria.slug === currentTarjeta.entidadBancaria.slug && 
+    t.slug !== currentTarjeta.slug
+  )
+  .slice(0, 3); // Limitar a 4 tarjetas máximo
+---
+
+{similarCards.length > 0 && (
+  <section class="mt-8 bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-semibold text-red-600 mb-6">
+      Otras tarjetas de {currentTarjeta.entidadBancaria.nombreBanco}
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {similarCards.map((tarjeta) => (
+        <TarjetaCard tarjeta={tarjeta} />
+      ))}
+    </div>
+  </section>
+)}

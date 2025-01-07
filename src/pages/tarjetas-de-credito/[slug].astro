@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import TarjetaDetail from '../../components/tarjetas/TarjetaDetail.astro';
+import SimilarCards from '../../components/tarjetas/detail/SimilarCards.astro';
 import { getTarjetas } from '../../lib/contentful/';
 
 export async function getStaticPaths() {
@@ -8,11 +9,14 @@ export async function getStaticPaths() {
   
   return tarjetas.map(tarjeta => ({
     params: { slug: tarjeta.slug },
-    props: { tarjeta },
+    props: { 
+      tarjeta,
+      allTarjetas: tarjetas 
+    },
   }));
 }
 
-const { tarjeta } = Astro.props;
+const { tarjeta, allTarjetas } = Astro.props;
 
 const breadcrumb = [
   { label: 'Inicio', href: '/' },
@@ -32,6 +36,7 @@ const description = `Conoce la tarjeta de crédito ${tarjeta.nombre} de ${tarjet
   <main class="container mx-auto px-4">
     <div class="max-w-6xl mx-auto">
       <TarjetaDetail tarjeta={tarjeta} />
+      <SimilarCards currentTarjeta={tarjeta} tarjetas={allTarjetas} />
     </div>
   </main>
 </Layout>
