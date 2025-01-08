@@ -2,6 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import { getNoticiasByCategoria } from '../../lib/contentful/queries/noticias';
 
+export async function getStaticPaths() {
+  return [{ params: { slug: undefined } }];
+}
+
 const noticias = await getNoticiasByCategoria('viajes');
 
 const breadcrumb = [

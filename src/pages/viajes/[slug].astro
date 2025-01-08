@@ -1,10 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getNoticiaBySlug, getNoticiasByCategoria } from '../../lib/contentful/queries/noticias';
+import { getNoticiaBySlug, getNoticias } from '../../lib/contentful/queries/noticias';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 
 export async function getStaticPaths() {
-  const noticias = await getNoticiasByCategoria('viajes');
+  const noticias = await getNoticias();
   
   return noticias.map(noticia => ({
     params: { slug: noticia.slug },
@@ -12,8 +12,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const { slug } = Astro.params;
-const noticia = await getNoticiaBySlug(slug);
+const { noticia } = Astro.props;
 
 if (!noticia) {
   return Astro.redirect('/404');
@@ -22,7 +21,7 @@ if (!noticia) {
 const breadcrumb = [
   { label: 'Inicio', href: '/' },
   { label: 'Viajes', href: '/viajes' },
-  { label: noticia.titulo, href: `/viajes/${slug}`, current: true }
+  { label: noticia.titulo, href: `/viajes/${noticia.slug}`, current: true }
 ];
 
 const contenidoHtml = documentToHtmlString(noticia.contenido);
