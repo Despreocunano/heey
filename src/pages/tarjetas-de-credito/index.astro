@@ -12,6 +12,12 @@ const [tarjetas, bancos] = await Promise.all([
   getBancos()
 ]);
 
+// Sort tarjetas to show featured ones first
+const sortedTarjetas = [...tarjetas].sort((a, b) => {
+  if (a.isFeatured === b.isFeatured) return 0;
+  return a.isFeatured ? -1 : 1;
+});
+
 const breadcrumb = [
   { label: 'Inicio', href: '/' },
   { label: 'Tarjetas de Crédito', href: '/tarjetas-de-credito', current: true }
@@ -25,12 +31,12 @@ const breadcrumb = [
   <TarjetaWelcome breadcrumb={breadcrumb} />
   <main class="container mx-auto px-4 py-8">
     <div class="space-y-8">
-      <Filters tarjetas={tarjetas} bancos={bancos} />
+      <Filters tarjetas={sortedTarjetas} bancos={bancos} />
       <div>
-        <ResultsCounter total={tarjetas.length} />
+        <ResultsCounter total={sortedTarjetas.length} />
         <div id="results-container">
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {tarjetas.map((tarjeta) => (
+            {sortedTarjetas.map((tarjeta) => (
               <TarjetaCard tarjeta={tarjeta} />
             ))}
           </div>

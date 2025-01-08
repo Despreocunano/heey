@@ -26,6 +26,7 @@ export interface ITarjetaCreditoFields {
   contras?: EntryFields.Symbol[];
   url: EntryFields.Symbol;
   slug: EntryFields.Symbol;
+  isFeatured: EntryFields.Boolean;
 }
 
 // Contentful Entry
@@ -65,4 +66,5 @@ export interface TarjetaCredito {
   contras?: string[];
   url: string;
   slug: string;
+  isFeatured: boolean;
 }

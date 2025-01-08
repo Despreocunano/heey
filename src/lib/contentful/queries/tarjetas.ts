@@ -10,7 +10,7 @@ export async function getTarjetas(): Promise<TarjetaCredito[]> {
   const response = await client.getEntries<ITarjetaCreditoFields>({
     content_type: 'tarjetaDeCredito',
     include: 2,
-    limit: 1000, // Fetch maximum items per request
+    limit: 1000,
     select: [
       'fields.nombre',
       'fields.imagenTarjeta',
@@ -27,7 +27,8 @@ export async function getTarjetas(): Promise<TarjetaCredito[]> {
       'fields.pros',
       'fields.contras',
       'fields.url',
-      'fields.slug'
+      'fields.slug',
+      'fields.isFeatured'
     ]
   });
   
@@ -82,7 +83,8 @@ export async function getTarjetaBySlug(slug: string): Promise<TarjetaCredito | n
       'fields.pros',
       'fields.contras',
       'fields.url',
-      'fields.slug'
+      'fields.slug',
+      'fields.isFeatured'
     ]
   });
 
@@ -114,4 +116,10 @@ export async function getTarjetaBySlug(slug: string): Promise<TarjetaCredito | n
   cache.set(`tarjeta-${slug}`, tarjeta);
 
   return tarjeta;
+}
+
+// New helper function to get featured cards
+export async function getFeaturedTarjetas(): Promise<TarjetaCredito[]> {
+  const tarjetas = await getTarjetas();
+  return tarjetas.filter(tarjeta => tarjeta.isFeatured);
 }
