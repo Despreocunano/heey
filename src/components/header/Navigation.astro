@@ -21,5 +21,17 @@ const currentPath = Astro.url.pathname;
     >
       BANCOS
     </MenuItem>
+    <MenuItem 
+    href="/viajes" 
+    current={currentPath.startsWith("/viajes")}
+  >
+    VIAJES
+  </MenuItem>
+  <MenuItem 
+  href="/finanzas-personales" 
+  current={currentPath.startsWith("/finanzas-personales")}
+>
+  FINANZAS PERSONALES
+</MenuItem>
   </ul>
 </nav>
