@@ -1,18 +1,23 @@
 ---
+export const prerender = true; // Marca esta ruta para generación estática
 import Layout from '../../layouts/Layout.astro';
 import TarjetaDetail from '../../components/tarjetas/TarjetaDetail.astro';
 import SimilarCards from '../../components/tarjetas/detail/SimilarCards.astro';
-import { getTarjetas, getTarjetaBySlug } from '../../lib/contentful/';
+import { getTarjetas } from '../../lib/contentful/';
 
-const { slug } = Astro.params;
-const [tarjeta, allTarjetas] = await Promise.all([
-  getTarjetaBySlug(slug),
-  getTarjetas()
-]);
-
-if (!tarjeta) {
-  return Astro.redirect('/404');
+export async function getStaticPaths() {
+  const tarjetas = await getTarjetas();
+  
+  return tarjetas.map(tarjeta => ({
+    params: { slug: tarjeta.slug },
+    props: { 
+      tarjeta,
+      allTarjetas: tarjetas 
+    },
+  }));
 }
+
+const { tarjeta, allTarjetas } = Astro.props;
 
 const breadcrumb = [
   { label: 'Inicio', href: '/' },

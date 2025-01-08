@@ -1,8 +1,11 @@
 ---
+export const prerender = false;
+
 import Layout from '../../layouts/Layout.astro';
 import { getNoticiasByCategoria } from '../../lib/contentful/queries/noticias';
 
-const noticias = await getNoticiasByCategoria('viajes');
+const VIAJES_SLUG = 'viajes';
+const noticias = await getNoticiasByCategoria(VIAJES_SLUG);
 
 const breadcrumb = [
   { label: 'Inicio', href: '/' },

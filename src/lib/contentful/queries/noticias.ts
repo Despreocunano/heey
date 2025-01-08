@@ -53,8 +53,8 @@ export async function getNoticiasByCategoria(categoriaSlug: string): Promise<Not
   // Primero obtenemos todas las noticias
   const noticias = await getNoticias();
   
-  // Luego filtramos por categoría
+  // Filtramos por categoría, asegurándonos de que el slug existe
   return noticias.filter(noticia => 
-    noticia.categoria?.some(cat => cat.slug === categoriaSlug)
+    noticia.categoria?.some(cat => cat.slug && cat.slug === categoriaSlug)
   );
 }
