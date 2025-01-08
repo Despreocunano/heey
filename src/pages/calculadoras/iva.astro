@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { IvaCalculator } from '../../components/calculadoras/iva/IvaCalculator';
+
+const breadcrumb = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Calculadoras', href: '/calculadoras' },
+  { label: 'Calculadora de IVA', href: '/calculadoras/iva', current: true }
+];
+---
+
+<Layout
+  title="Calculadora de IVA"
+  description="Calcula fácilmente el IVA (19%) de cualquier monto. Agrega o quita el IVA de tus cálculos."
+  breadcrumb={breadcrumb}
+>
+  <main class="bg-gradient-to-b from-gray-50 to-white py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">
+          Calculadora de IVA
+        </h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Calcula rápidamente el IVA (19%) de cualquier monto de forma simple y precisa
+        </p>
+      </div>
+
+      <IvaCalculator client:load />
+   
+    </div>
+  </main>
+</Layout>
