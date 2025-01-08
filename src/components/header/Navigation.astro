@@ -7,19 +7,19 @@ const currentPath = Astro.url.pathname;
 <nav class="hidden md:flex space-x-2">
   <ul class="flex space-x-2">
     <MenuItem href="/" current={currentPath === "/"}>
-      Inicio
+      INICIO
     </MenuItem>
     <MenuItem 
       href="/tarjetas-de-credito" 
       current={currentPath.startsWith("/tarjetas-de-credito")}
     >
-      Tarjetas de Crédito
+      TARJETAS DE CRÉDITO
     </MenuItem>
     <MenuItem 
       href="/banco" 
       current={currentPath.startsWith("/banco")}
     >
-      Bancos
+      BANCOS
     </MenuItem>
   </ul>
 </nav>
