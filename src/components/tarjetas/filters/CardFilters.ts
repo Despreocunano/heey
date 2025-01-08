@@ -21,6 +21,7 @@ export class CardFilters {
   }
 
   private setupEventListeners(): void {
+    // Filter change events (both mobile and desktop)
     document.addEventListener('filter-change', ((event: CustomEvent) => {
       if (event.detail?.type === 'categoria') {
         this.selectedCategory = event.detail.value;
@@ -32,6 +33,7 @@ export class CardFilters {
       this.filterCards();
     }) as EventListener);
 
+    // Clear filters event
     document.addEventListener('clear-filters', () => {
       this.selectedCategory = '';
       this.selectedBrand = '';
@@ -41,6 +43,12 @@ export class CardFilters {
         document.dispatchEvent(new CustomEvent('filter-reset', { detail: { type } }));
       });
       
+      this.filterCards();
+    });
+
+    // Close mobile filters event
+    document.addEventListener('close-mobile-filters', () => {
+      // Re-apply filters when mobile drawer closes
       this.filterCards();
     });
   }
