@@ -2,21 +2,17 @@
 import Layout from '../../layouts/Layout.astro';
 import TarjetaDetail from '../../components/tarjetas/TarjetaDetail.astro';
 import SimilarCards from '../../components/tarjetas/detail/SimilarCards.astro';
-import { getTarjetas } from '../../lib/contentful/';
+import { getTarjetas, getTarjetaBySlug } from '../../lib/contentful/';
 
-export async function getStaticPaths() {
-  const tarjetas = await getTarjetas();
-  
-  return tarjetas.map(tarjeta => ({
-    params: { slug: tarjeta.slug },
-    props: { 
-      tarjeta,
-      allTarjetas: tarjetas 
-    },
-  }));
+const { slug } = Astro.params;
+const [tarjeta, allTarjetas] = await Promise.all([
+  getTarjetaBySlug(slug),
+  getTarjetas()
+]);
+
+if (!tarjeta) {
+  return Astro.redirect('/404');
 }
-
-const { tarjeta, allTarjetas } = Astro.props;
 
 const breadcrumb = [
   { label: 'Inicio', href: '/' },

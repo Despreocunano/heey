@@ -1,18 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getNoticiaBySlug, getNoticias } from '../../lib/contentful/queries/noticias';
+import { getNoticiaBySlug } from '../../lib/contentful/queries/noticias';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 
-export async function getStaticPaths() {
-  const noticias = await getNoticias();
-  
-  return noticias.map(noticia => ({
-    params: { slug: noticia.slug },
-    props: { noticia }
-  }));
-}
-
-const { noticia } = Astro.props;
+const { slug } = Astro.params;
+const noticia = await getNoticiaBySlug(slug);
 
 if (!noticia) {
   return Astro.redirect('/404');

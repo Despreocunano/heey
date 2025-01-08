@@ -1,24 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import TarjetaCard from '../../components/tarjetas/TarjetaCard.astro';
-import { getBancos, getTarjetas } from '../../lib/contentful';
+import { getBancos, getTarjetas, getBancoBySlug } from '../../lib/contentful';
 
-export async function getStaticPaths() {
-  const [bancos, tarjetas] = await Promise.all([
-    getBancos(),
-    getTarjetas()
-  ]);
-  
-  return bancos.map(banco => ({
-    params: { slug: banco.slug },
-    props: { 
-      banco,
-      tarjetas: tarjetas.filter(t => t.entidadBancaria.slug === banco.slug)
-    },
-  }));
+const { slug } = Astro.params;
+const [banco, tarjetas] = await Promise.all([
+  getBancoBySlug(slug),
+  getTarjetas()
+]);
+
+if (!banco) {
+  return Astro.redirect('/404');
 }
 
-const { banco, tarjetas } = Astro.props;
+const bancoTarjetas = tarjetas.filter(t => t.entidadBancaria.slug === banco.slug);
 
 const breadcrumb = [
   { label: 'Inicio', href: '/' },
@@ -78,7 +73,7 @@ const contactCards: ContactCard[] = [
                   Tarjetas del {banco.nombreBanco}
                 </h1>
                 <p class="text-lg text-gray-600">
-                    {banco.nombreBanco} cuenta con {tarjetas.length} tarjeta{tarjetas.length === 1 ? '' : 's'} de crédito disponible{tarjetas.length === 1 ? '' : 's'}
+                    {banco.nombreBanco} cuenta con {bancoTarjetas.length} tarjeta{bancoTarjetas.length === 1 ? '' : 's'} de crédito disponible{bancoTarjetas.length === 1 ? '' : 's'}
                 </p>
               </div>
             </div>
@@ -108,7 +103,7 @@ const contactCards: ContactCard[] = [
 
     <div class="container mx-auto px-4 py-12">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-        {tarjetas.map((tarjeta) => (
+        {bancoTarjetas.map((tarjeta) => (
           <TarjetaCard tarjeta={tarjeta} />
         ))}
       </div>
