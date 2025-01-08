@@ -1,16 +1,15 @@
 ---
-import type { Noticia } from '../../types/contentful/noticia';
 import { getNoticiasByCategoria } from '../../lib/contentful/queries/noticias';
 
 interface Props {
   currentSlug: string;
-  category: string;
 }
 
-const { currentSlug, category } = Astro.props;
+const { currentSlug } = Astro.props;
 
 // Obtener noticias relacionadas
-const noticias = await getNoticiasByCategoria(category);
+const VIAJES_SLUG = 'viajes';
+const noticias = await getNoticiasByCategoria(VIAJES_SLUG);
 const relatedArticles = noticias
   .filter(noticia => noticia.slug !== currentSlug)
   .slice(0, 5);
@@ -26,7 +25,7 @@ const relatedArticles = noticias
       <div class="space-y-6">
         {relatedArticles.map((noticia) => (
           <a 
-            href={`/p/${category}/${noticia.slug}`}
+            href={`/viajes/${noticia.slug}`}
             class="group flex gap-4 items-start"
           >
             <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden">
