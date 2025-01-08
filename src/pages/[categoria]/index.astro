@@ -4,6 +4,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getNoticiasByCategoria } from '../../lib/contentful/queries/noticias';
 import { getCategoriaNoticiaBySlug } from '../../lib/contentful/queries/categoriasNoticias';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 
 const { categoria } = Astro.params;
 if (!categoria) {
@@ -21,47 +22,187 @@ const breadcrumb = [
   { label: 'Inicio', href: '/' },
   { label: categoriaData.nombreCategoria, href: `/${categoria}`, current: true }
 ];
+
+// Función para calcular el tiempo de lectura aproximado
+function calcularTiempoLectura(contenido: any) {
+  const palabrasPorMinuto = 200;
+  const texto = documentToHtmlString(contenido);
+  const numeroPalabras = texto.split(/\s+/).length;
+  const minutos = Math.ceil(numeroPalabras / palabrasPorMinuto);
+  return minutos;
+}
+
+// Formatear fecha
+function formatearFecha(fecha: string) {
+  return new Date(fecha).toLocaleDateString('es-CL', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
+// Separar la noticia destacada (la primera) del resto
+const [noticiaDestacada, ...noticiasSecundarias] = noticias;
 ---
 
 <Layout 
-  title={`Noticias de ${categoriaData.nombreCategoria}`} 
-  description={`Lee las últimas noticias sobre ${categoriaData.nombreCategoria}`}
+  title={categoriaData.nombreCategoria}
+  description={`Las últimas noticias sobre ${categoriaData.nombreCategoria.toLowerCase()}`}
   breadcrumb={breadcrumb}
 >
-  <main class="max-w-7xl mx-auto px-4 py-12">
-    <h1 class="text-4xl font-bold text-gray-900 mb-8">
-      Noticias de {categoriaData.nombreCategoria}
-    </h1>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {noticias.map((noticia) => (
-        <article class="bg-white rounded-lg shadow-md overflow-hidden">
-          <img
-            src={noticia.imagen.url}
-            alt={noticia.imagen.title}
-            class="w-full h-48 object-cover"
-          />
-          <div class="p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">
-              {noticia.titulo}
-            </h2>
-            <a
-              href={`/${categoria}/${noticia.slug}`}
-              class="text-teal-600 hover:text-teal-700 font-medium"
-            >
-              Leer más →
-            </a>
-          </div>
-        </article>
-      ))}
-    </div>
-
-    {noticias.length === 0 && (
-      <div class="text-center py-12">
-        <p class="text-gray-600">
-          No hay noticias disponibles en esta categoría.
+  <main class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 py-12">
+      {/* Encabezado de la categoría */}
+      <div class="text-left mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          {categoriaData.nombreCategoria}
+        </h1>
+        <p class="text-xl text-gray-600 max-w-3xl">
+          Descubre las últimas noticias y artículos sobre {categoriaData.nombreCategoria.toLowerCase()}
         </p>
       </div>
-    )}
+
+      {noticias.length > 0 ? (
+        <div class="space-y-12">
+          {/* Noticia Principal */}
+          {noticiaDestacada && (
+            <article class="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="relative h-[400px] lg:h-full">
+                  <img 
+                    src={noticiaDestacada.imagen.url} 
+                    alt={noticiaDestacada.imagen.title}
+                    class="absolute inset-0 w-full h-full object-cover"
+                  />
+                </div>
+                <div class="p-8 lg:pr-12 flex flex-col justify-center">
+                  <div class="flex items-center gap-4 mb-4">
+                    {noticiaDestacada.categoria?.map((cat) => (
+                      <a
+                        href={`/${cat.slug}`}
+                        class="text-sm font-medium text-teal-600 hover:text-teal-700 bg-teal-50 px-3 py-1 rounded-full"
+                      >
+                        {cat.nombreCategoria}
+                      </a>
+                    ))}
+                  </div>
+                  <h2 class="text-3xl font-bold text-gray-900 mb-4 hover:text-teal-600 transition-colors">
+                    <a href={`/${categoria}/${noticiaDestacada.slug}`}>
+                      {noticiaDestacada.titulo}
+                    </a>
+                  </h2>
+                  <p class="text-gray-600 mb-6 line-clamp-3">
+                    {documentToHtmlString(noticiaDestacada.contenido).replace(/<[^>]*>/g, '').slice(0, 200)}...
+                  </p>
+                  <div class="flex items-center gap-4 text-sm text-gray-500">
+                    <time class="flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      Hace 2 días
+                    </time>
+                    <span class="flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                      </svg>
+                      {calcularTiempoLectura(noticiaDestacada.contenido)} min de lectura
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          )}
+
+          {/* Grid de Noticias Secundarias */}
+          {noticiasSecundarias.length > 0 && (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {noticiasSecundarias.map((noticia) => (
+                <article class="bg-white rounded-xl shadow-sm overflow-hidden group">
+                  <a href={`/${categoria}/${noticia.slug}`} class="block">
+                    <div class="aspect-w-16 aspect-h-9 relative">
+                      <img 
+                        src={noticia.imagen.url} 
+                        alt={noticia.imagen.title}
+                        class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div class="p-6">
+                      <div class="flex items-center gap-2 mb-4">
+                        {noticia.categoria?.map((cat) => (
+                          <span class="text-sm font-medium text-teal-600 bg-teal-50 px-2 py-1 rounded-full">
+                            {cat.nombreCategoria}
+                          </span>
+                        ))}
+                      </div>
+                      <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-teal-600 transition-colors line-clamp-2">
+                        {noticia.titulo}
+                      </h3>
+                      <p class="text-gray-600 mb-4 line-clamp-2">
+                        {documentToHtmlString(noticia.contenido).replace(/<[^>]*>/g, '').slice(0, 150)}...
+                      </p>
+                      <div class="flex items-center gap-4 text-sm text-gray-500">
+                        <time class="flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          Hace 2 días
+                        </time>
+                        <span class="flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                          </svg>
+                          {calcularTiempoLectura(noticia.contenido)} min de lectura
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <div class="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto">
+            <div class="text-gray-400 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">
+              No hay artículos disponibles
+            </h2>
+            <p class="text-gray-600">
+              Pronto publicaremos nuevo contenido en esta categoría.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
   </main>
 </Layout>
+
+<style>
+  .aspect-w-16 {
+    position: relative;
+    padding-bottom: 56.25%;
+  }
+  
+  .aspect-h-9 {
+    position: relative;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
