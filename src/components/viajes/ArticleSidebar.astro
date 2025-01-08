@@ -1,0 +1,63 @@
+---
+import { getNoticiasByCategoria } from '../../lib/contentful/queries/noticias';
+
+interface Props {
+  currentSlug: string;
+}
+
+const { currentSlug } = Astro.props;
+
+// Obtener noticias relacionadas
+const VIAJES_SLUG = 'viajes';
+const noticias = await getNoticiasByCategoria(VIAJES_SLUG);
+const relatedArticles = noticias
+  .filter(noticia => noticia.slug !== currentSlug)
+  .slice(0, 5);
+---
+
+<div class="hidden lg:block lg:col-span-1">
+  <div class="sticky top-24">
+    {/* Artículos Relacionados */}
+    <div class="bg-white rounded-xl shadow-sm p-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-6">
+        Artículos Relacionados
+      </h2>
+      <div class="space-y-6">
+        {relatedArticles.map((noticia) => (
+          <a 
+            href={`/viajes/${noticia.slug}`}
+            class="group flex gap-4 items-start"
+          >
+            <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden">
+              <img 
+                src={noticia.imagen.url} 
+                alt={noticia.imagen.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-base font-medium text-gray-900 group-hover:text-teal-600 line-clamp-3 leading-snug">
+                {noticia.titulo}
+              </h3>
+              <div class="mt-2 flex items-center gap-2 text-sm text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>5 min de lectura</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
