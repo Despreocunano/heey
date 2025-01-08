@@ -1,0 +1,67 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { getNoticiasByCategoria } from '../../lib/contentful/queries/noticias';
+import { getCategoriaNoticiaBySlug } from '../../lib/contentful/queries/categoriasNoticias';
+
+const { categoria } = Astro.params;
+if (!categoria) {
+  return Astro.redirect('/404');
+}
+
+const categoriaData = await getCategoriaNoticiaBySlug(categoria);
+if (!categoriaData) {
+  return Astro.redirect('/404');
+}
+
+const noticias = await getNoticiasByCategoria(categoria);
+
+const breadcrumb = [
+  { label: 'Inicio', href: '/' },
+  { label: categoriaData.nombreCategoria, href: `/${categoria}`, current: true }
+];
+---
+
+<Layout 
+  title={`Noticias de ${categoriaData.nombreCategoria}`} 
+  description={`Lee las últimas noticias sobre ${categoriaData.nombreCategoria}`}
+  breadcrumb={breadcrumb}
+>
+  <main class="max-w-7xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-gray-900 mb-8">
+      Noticias de {categoriaData.nombreCategoria}
+    </h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {noticias.map((noticia) => (
+        <article class="bg-white rounded-lg shadow-md overflow-hidden">
+          <img
+            src={noticia.imagen.url}
+            alt={noticia.imagen.title}
+            class="w-full h-48 object-cover"
+          />
+          <div class="p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">
+              {noticia.titulo}
+            </h2>
+            <a
+              href={`/${categoria}/${noticia.slug}`}
+              class="text-teal-600 hover:text-teal-700 font-medium"
+            >
+              Leer más →
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    {noticias.length === 0 && (
+      <div class="text-center py-12">
+        <p class="text-gray-600">
+          No hay noticias disponibles en esta categoría.
+        </p>
+      </div>
+    )}
+  </main>
+</Layout>
