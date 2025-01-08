@@ -9,7 +9,7 @@ export function MobileFilterButton() {
   return (
     <button
       onClick={openFilters}
-      className="md:hidden fixed bottom-4 right-4 z-50 bg-red-600 text-white rounded-full px-6 py-3 shadow-lg flex items-center gap-2 hover:bg-red-700 transition-colors"
+      className="md:hidden fixed bottom-4 right-4 z-50 bg-teal-600 text-white rounded-full px-6 py-3 shadow-lg flex items-center gap-2 hover:bg-teal-700 transition-colors"
     >
       <svg 
         xmlns="http://www.w3.org/2000/svg" 
