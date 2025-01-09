@@ -33,5 +33,11 @@ const currentPath = Astro.url.pathname;
 >
   BILLETERA
 </MenuItem>
+<MenuItem 
+href="/jovenes" 
+current={currentPath.startsWith("/jovenes")}
+>
+JÓVENES
+</MenuItem>
   </ul>
 </nav>
