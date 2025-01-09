@@ -1,0 +1,152 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ComercioCard from '../../components/descuentos/ComercioCard.astro';
+import { getDescuentosActivos, getComercios } from '../../lib/contentful';
+
+const [descuentos, comercios] = await Promise.all([
+  getDescuentosActivos(),
+  getComercios()
+]);
+
+console.log('Descuentos:', descuentos); // Debug
+console.log('Comercios:', comercios); // Debug
+
+// Agrupar descuentos por comercio y obtener el mejor descuento de cada uno
+const comerciosConDescuentos = comercios
+  .map(comercio => {
+    const descuentosComercio = descuentos.filter(d => {
+      console.log(`Comparing ${d.comercio.slug} with ${comercio.slug}`); // Debug
+      return d.comercio.slug === comercio.slug;
+    });
+    
+    if (descuentosComercio.length === 0) {
+      console.log(`No descuentos found for ${comercio.nombre}`); // Debug
+      return null;
+    }
+    
+    const mejorDescuento = descuentosComercio.reduce((mejor, actual) => 
+      actual.porcentajeDescuento > mejor.porcentajeDescuento ? actual : mejor
+    , descuentosComercio[0]);
+
+    console.log(`Mejor descuento for ${comercio.nombre}:`, mejorDescuento); // Debug
+
+    return {
+      comercio,
+      mejorDescuento
+    };
+  })
+  .filter((item): item is NonNullable<typeof item> => item !== null);
+
+console.log('Comercios con descuentos:', comerciosConDescuentos); // Debug
+
+const categorias = [...new Set(comercios.map(c => c.categoria))];
+
+const breadcrumb = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Descuentos', href: '/descuentos', current: true }
+];
+---
+
+<Layout 
+  title="Descuentos y Promociones"
+  description="Descubre los mejores descuentos y promociones con tarjetas de crédito en los principales comercios."
+  breadcrumb={breadcrumb}
+>
+  <main class="bg-gray-50">
+    <div class="bg-teal-950 text-white">
+      <div class="max-w-7xl mx-auto px-4 py-12">
+        <div class="text-center">
+          <h1 class="text-4xl font-bold mb-4">
+            Descuentos y Promociones
+          </h1>
+          <p class="text-xl text-gray-200 max-w-2xl mx-auto">
+            Aprovecha los mejores descuentos con tus tarjetas de crédito en restaurantes, retail, supermercados y más.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 py-12">
+      {/* Filtros por categoría */}
+      <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">
+          Filtrar por categoría
+        </h2>
+        <div class="flex flex-wrap gap-2">
+          <button
+            class="px-4 py-2 rounded-full text-sm font-medium bg-teal-600 text-white border border-transparent"
+            data-categoria=""
+          >
+            Todos
+          </button>
+          {categorias.map((categoria) => (
+            <button
+              class="px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 transition-colors"
+              data-categoria={categoria}
+            >
+              {categoria}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Grid de comercios */}
+      <div id="comercios-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {comerciosConDescuentos.map(({ comercio, mejorDescuento }) => (
+          <div data-comercio-categoria={comercio.categoria}>
+            <ComercioCard 
+              comercio={comercio}
+              mejorDescuento={mejorDescuento}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Estado vacío */}
+      {comerciosConDescuentos.length === 0 && (
+        <div class="text-center py-12">
+          <div class="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto">
+            <div class="text-gray-400 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p class="text-gray-600">
+              No hay descuentos disponibles en este momento.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // Lógica de filtrado por categoría
+  const buttons = document.querySelectorAll('[data-categoria]');
+  const cards = document.querySelectorAll('[data-comercio-categoria]');
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const categoria = button.getAttribute('data-categoria');
+      
+      // Toggle active state
+      buttons.forEach(b => {
+        b.classList.remove('bg-teal-600', 'text-white');
+        b.classList.add('bg-white', 'text-gray-700');
+      });
+      button.classList.remove('bg-white', 'text-gray-700');
+      button.classList.add('bg-teal-600', 'text-white');
+      
+      // Filter cards
+      cards.forEach(card => {
+        const cardCategoria = card.getAttribute('data-comercio-categoria');
+        if (!categoria || categoria === cardCategoria) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>

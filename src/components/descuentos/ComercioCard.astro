@@ -1,0 +1,37 @@
+---
+import type { Comercio } from '../../types/contentful/comercio';
+import type { Descuento } from '../../types/contentful/descuento';
+
+interface Props {
+  comercio: Comercio;
+  mejorDescuento: Descuento;
+}
+
+const { comercio, mejorDescuento } = Astro.props;
+---
+
+<a 
+  href={`/descuentos/${comercio.slug}`}
+  class="bg-black rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-rose-500 group"
+>
+  <div class="p-6 flex flex-col items-center text-center">
+    {/* Logo */}
+    <div class="h-16 mb-4 flex items-center justify-center">
+      <img 
+        src={comercio.logo.url} 
+        alt={comercio.logo.title}
+        class="h-full w-auto object-contain"
+      />
+    </div>
+
+    {/* Nombre del comercio */}
+    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-teal-600 transition-colors mb-2">
+      {comercio.nombre}
+    </h3>
+
+    {/* Mejor descuento */}
+    <p class="text-sm text-gray-600">
+      Hasta <span class="font-semibold text-teal-600">{mejorDescuento.porcentajeDescuento}%</span> de descuento
+    </p>
+  </div>
+</a>
