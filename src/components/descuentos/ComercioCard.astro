@@ -12,26 +12,53 @@ const { comercio, mejorDescuento } = Astro.props;
 
 <a 
   href={`/descuentos/${comercio.slug}`}
-  class="bg-black rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-rose-500 group"
+  class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group overflow-hidden"
 >
-  <div class="p-6 flex flex-col items-center text-center">
-    {/* Logo */}
-    <div class="h-16 mb-4 flex items-center justify-center">
-      <img 
-        src={comercio.logo.url} 
-        alt={comercio.logo.title}
-        class="h-full w-auto object-contain"
-      />
+  <div class="relative">
+    {/* Badge de mejor descuento */}
+    <div class="absolute top-4 right-4 bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+      Hasta {mejorDescuento.porcentajeDescuento}% dcto.
     </div>
 
-    {/* Nombre del comercio */}
-    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-teal-600 transition-colors mb-2">
-      {comercio.nombre}
-    </h3>
+    <div class="p-6">
+      {/* Logo */}
+      <div class="h-20 mb-6 flex items-center justify-center bg-gray-50 rounded-lg p-4">
+        <img 
+          src={comercio.logo.url} 
+          alt={comercio.logo.title}
+          class="h-full w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+        />
+      </div>
 
-    {/* Mejor descuento */}
-    <p class="text-sm text-gray-600">
-      Hasta <span class="font-semibold text-teal-600">{mejorDescuento.porcentajeDescuento}%</span> de descuento
-    </p>
+      {/* Información */}
+      <div class="text-center">
+        <h3 class="text-xl font-semibold text-gray-900 group-hover:text-teal-600 transition-colors mb-2">
+          {comercio.nombre}
+        </h3>
+        
+        <div class="flex items-center justify-center gap-2 text-sm text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-600" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+          </svg>
+          <span>{comercio.categoria}</span>
+        </div>
+      </div>
+    </div>
+
+    {/* Footer con bancos */}
+    {mejorDescuento.bancos && mejorDescuento.bancos.length > 0 && (
+      <div class="border-t border-gray-100 p-4 bg-gray-50">
+        <p class="text-xs text-gray-500 mb-2 text-center">Bancos participantes:</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          {mejorDescuento.bancos.map(banco => (
+            <img 
+              src={banco.logoBanco.url}
+              alt={banco.nombreBanco}
+              class="h-6 w-auto object-contain opacity-75 group-hover:opacity-100 transition-opacity"
+            />
+          ))}
+        </div>
+      </div>
+    )}
   </div>
 </a>
