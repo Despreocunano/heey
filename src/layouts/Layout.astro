@@ -15,7 +15,7 @@ interface Props {
 
 const { 
   title = "Decisiones Financieras con Confianza!",
-  description = "Encuentra y compara los mejores productos financieros. Análisis experto, beneficios, requisitos y más.",
+  description = "Encuentra y compara los mejores productos financieros. Análisis por expertos, beneficios, requisitos y más.",
   breadcrumb 
 } = Astro.props;
 
@@ -25,6 +25,15 @@ const showBreadcrumb = breadcrumb && Astro.url.pathname !== '/';
 <!doctype html>
 <html lang="es">
   <head>
+    <!-- Google tag (gtag.js) -->
+<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-HBFGJ0MTXM"></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-HBFGJ0MTXM');
+</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
