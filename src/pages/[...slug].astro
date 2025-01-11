@@ -1,0 +1,37 @@
+---
+export const prerender = false;
+
+import Layout from '../layouts/Layout.astro';
+import HeroLanding from '../components/landing/HeroLanding.astro';
+import ContenidoLanding from '../components/landing/ContenidoLanding.astro';
+import { getLandingPageBySlug } from '../lib/contentful/queries/landingPages';
+
+const { slug } = Astro.params;
+if (!slug) {
+  return Astro.redirect('/404');
+}
+
+const landingPage = await getLandingPageBySlug(slug);
+if (!landingPage) {
+  return Astro.redirect('/404');
+}
+
+const breadcrumb = [
+  { label: 'Inicio', href: '/' },
+  { label: landingPage.tituloPagina, href: `/${slug}`, current: true }
+];
+---
+
+<Layout 
+  title={landingPage.tituloPagina}
+  description={landingPage.heroLanding.descripcion}
+  breadcrumb={breadcrumb}
+>
+  <main>
+    <HeroLanding hero={landingPage.heroLanding} />
+    
+    {landingPage.contenidoPgina.map((contenido) => (
+      <ContenidoLanding contenido={contenido} />
+    ))}
+  </main>
+</Layout>
