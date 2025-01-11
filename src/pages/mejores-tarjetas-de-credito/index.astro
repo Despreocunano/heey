@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const breadcrumb = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Mejores tarjetas de crédito', href: '/mejores-tarjetas-de-credito' }
+  ];
+---
+
+<Layout
+  title="Mejores Tarjetas de C´redito"
+  description="Descubre cuales son las mejores tarjetas de crédito en Chile, análisis, requisitos, beneficios y costos asociados."
+  breadcrumb={breadcrumb}
+>
+  <main class="bg-gradient-to-b from-gray-50 to-white py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        Encuenta las mejores tarjetas de crédito
+        </h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Hemos estudiado y comparado las mejores tarjetas de crédito en Chile. Descubre cuales son las mejores opciones para ti.
+        </p>
+      </div>
+
+   
+    </div>
+  </main>
+</Layout>

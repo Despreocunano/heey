@@ -5,6 +5,7 @@ export async function getNoticias(): Promise<Noticia[]> {
   const response = await client.getEntries<INoticiaFields>({
     content_type: 'noticias',
     include: 2,
+    order: '-fields.fecha', // Ordenar por fecha descendente
   });
 
   return response.items.map(item => ({
@@ -19,6 +20,7 @@ export async function getNoticias(): Promise<Noticia[]> {
       nombreCategoria: cat.fields.nombreCategoria,
       slug: cat.fields.slug || '',
     })),
+    fecha: item.fields.fecha, // Incluir la fecha en el resultado
   }));
 }
 
@@ -46,6 +48,7 @@ export async function getNoticiaBySlug(slug: string): Promise<Noticia | null> {
       nombreCategoria: cat.fields.nombreCategoria,
       slug: cat.fields.slug || '',
     })),
+    fecha: item.fields.fecha, // Incluir la fecha en el resultado
   };
 }
 
@@ -67,7 +70,8 @@ export async function getNoticiasByCategoria(categoriaSlug: string): Promise<Not
   const response = await client.getEntries<INoticiaFields>({
     content_type: 'noticias',
     'fields.categoria.sys.id': categoriaId,
-    include: 2
+    include: 2,
+    order: '-fields.fecha', // Ordenar por fecha descendente
   });
 
   return response.items.map(item => ({
@@ -82,5 +86,6 @@ export async function getNoticiasByCategoria(categoriaSlug: string): Promise<Not
       nombreCategoria: cat.fields.nombreCategoria,
       slug: cat.fields.slug || '',
     })),
+    fecha: item.fields.fecha, // Incluir la fecha en el resultado
   }));
 }

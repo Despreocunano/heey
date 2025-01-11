@@ -9,6 +9,7 @@ export interface INoticiaFields {
   contenido: EntryFields.RichText;
   slug: EntryFields.Symbol;
   categoria?: ICategoriaNoticia[];
+  fecha: EntryFields.Date; // Agregamos el campo fecha
 }
 
 // Contentful Entry
@@ -27,4 +28,5 @@ export interface Noticia {
     nombreCategoria: string;
     slug: string;
   }[];
+  fecha: string; // Agregamos el campo fecha
 }
