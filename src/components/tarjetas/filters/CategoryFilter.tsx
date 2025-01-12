@@ -46,7 +46,7 @@ export function CategoryFilter({ categories }: CategoryFilterProps) {
           onClick={() => handleCategoryChange(category)}
           className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
             selectedCategory === category
-              ? 'bg-teal-600 text-white'
+              ? 'bg-teal-100 text-gray-700'
               : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
           }`}
         >
