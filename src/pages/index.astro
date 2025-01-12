@@ -3,7 +3,6 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/home/Hero.astro';
 import ProductCategories from '../components/home/ProductCategories.astro';
 import FeaturedCards from '../components/home/FeaturedCards.astro';
-import WhyUs from '../components/home/WhyUs.astro';
 import { getTarjetas } from '../lib/contentful';
 
 const tarjetas = await getTarjetas();
@@ -14,6 +13,5 @@ const tarjetas = await getTarjetas();
     <Hero />
     <ProductCategories />
     <FeaturedCards tarjetas={tarjetas} />
-    <WhyUs />
   </main>
 </Layout>
