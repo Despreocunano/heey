@@ -38,7 +38,7 @@ const { tarjeta, mobile } = Astro.props;
       )}
     </div>
     <a 
-      href={tarjeta.url}
+      href={`${tarjeta.url}?utm_source=heey.cl&utm_medium=card_tarjeta&utm_campaign=card_${tarjeta.slug}`}
       target="_blank"
       rel="noopener noreferrer"
       class="block w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors text-center"
