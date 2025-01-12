@@ -28,6 +28,7 @@ export interface LandingPage {
     };
   };
   contenidoPgina: {
+    titulo: string;
     contenido: EntryFields.RichText;
   }[];
 }

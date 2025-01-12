@@ -7,12 +7,18 @@ import ContenidoLanding from '../components/landing/ContenidoLanding.astro';
 import { getLandingPageBySlug } from '../lib/contentful/queries/landingPages';
 
 const { slug } = Astro.params;
+console.log('Requested slug:', slug);
+
 if (!slug) {
+  console.log('No slug provided');
   return Astro.redirect('/404');
 }
 
 const landingPage = await getLandingPageBySlug(slug);
+console.log('Landing page data:', landingPage);
+
 if (!landingPage) {
+  console.log('No landing page found');
   return Astro.redirect('/404');
 }
 
@@ -31,7 +37,10 @@ const breadcrumb = [
     <HeroLanding hero={landingPage.heroLanding} />
     
     {landingPage.contenidoPgina.map((contenido) => (
-      <ContenidoLanding contenido={contenido} />
+      <ContenidoLanding 
+        titulo={contenido.titulo}
+        contenido={contenido.contenido}
+      />
     ))}
   </main>
 </Layout>
