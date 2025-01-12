@@ -50,7 +50,7 @@ const shareLinks = {
             {noticia.categoria?.map((cat) => (
               <a
                 href={`/${cat.slug}`}
-                class="text-sm font-medium text-teal-600 hover:text-teal-700 bg-teal-50 px-3 py-1 rounded-full"
+                class="text-sm font-medium text-teal-500 hover:text-teal-700 bg-teal-50 px-3 py-1 rounded-full"
               >
                 {cat.nombreCategoria}
               </a>
@@ -97,7 +97,7 @@ const shareLinks = {
             {/* Article Content */}
             <article class="p-8">
               <div 
-                class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-600 prose-a:text-teal-600 hover:prose-a:text-teal-700 prose-img:rounded-xl prose-strong:text-gray-900"
+                class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-600 prose-a:text-teal-500 hover:prose-a:text-teal-700 prose-img:rounded-xl prose-strong:text-gray-900"
                 set:html={contenidoHtml}
               />
             </article>

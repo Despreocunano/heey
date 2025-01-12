@@ -77,13 +77,13 @@ const [noticiaDestacada, ...noticiasSecundarias] = noticias;
                     {noticiaDestacada.categoria?.map((cat) => (
                       <a
                         href={`/${cat.slug}`}
-                        class="text-sm font-medium text-teal-600 hover:text-teal-700 bg-teal-50 px-3 py-1 rounded-full"
+                        class="text-sm font-medium text-teal-500 hover:text-teal-700 bg-teal-50 px-3 py-1 rounded-full"
                       >
                         {cat.nombreCategoria}
                       </a>
                     ))}
                   </div>
-                  <h2 class="text-3xl font-bold text-gray-900 mb-4 hover:text-teal-600 transition-colors">
+                  <h2 class="text-3xl font-bold text-gray-900 mb-4 hover:text-teal-500 transition-colors">
                     <a href={`/${categoria}/${noticiaDestacada.slug}`}>
                       {noticiaDestacada.titulo}
                     </a>
@@ -126,12 +126,12 @@ const [noticiaDestacada, ...noticiasSecundarias] = noticias;
                     <div class="p-6">
                       <div class="flex items-center gap-2 mb-4">
                         {noticia.categoria?.map((cat) => (
-                          <span class="text-sm font-medium text-teal-600 bg-teal-50 px-2 py-1 rounded-full">
+                          <span class="text-sm font-medium text-teal-500 bg-teal-50 px-2 py-1 rounded-full">
                             {cat.nombreCategoria}
                           </span>
                         ))}
                       </div>
-                      <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-teal-600 transition-colors line-clamp-2">
+                      <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-teal-500 transition-colors line-clamp-2">
                         {noticia.titulo}
                       </h3>
                       <p class="text-gray-600 mb-4 line-clamp-2">
