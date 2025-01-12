@@ -38,13 +38,36 @@ const { tarjeta, mobile } = Astro.props;
       )}
     </div>
     <a 
-      href={`${tarjeta.url}?utm_source=heey.cl&utm_medium=card_tarjeta&utm_campaign=card_${tarjeta.slug}`}
+      href={`${tarjeta.url}?utm_source=heey.cl&utm_medium=detalle_tarjeta&utm_campaign=boton_sidebar`}
       target="_blank"
       rel="noopener noreferrer"
       class="block w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors text-center"
+      data-ga4-event="solicitar_tarjeta"
+      data-ga4-banco={tarjeta.entidadBancaria.nombreBanco}
+      data-ga4-tarjeta={tarjeta.nombre}
     >
       Solicitar Tarjeta
     </a>
-    <span class="text-[10px] text-center text-gray-500">Serás sirigido al sitio web de {tarjeta.entidadBancaria.nombreBanco}</span>
+    <span class="text-[10px] text-center text-gray-500">Serás dirigido al sitio web de {tarjeta.entidadBancaria.nombreBanco}</span>
   </div>
 </div>
+
+<script>
+  import { sendGA4Event } from '../../../utils/analytics';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const links = document.querySelectorAll('a[data-ga4-event]');
+    links.forEach(link => {
+      link.addEventListener('click', (event) => {
+        const target = event.currentTarget as HTMLAnchorElement;
+        const eventName = target.getAttribute('data-ga4-event');
+        const banco = target.getAttribute('data-ga4-banco');
+        const tarjeta = target.getAttribute('data-ga4-tarjeta');
+        if (eventName && banco && tarjeta) {
+          sendGA4Event(eventName, banco, tarjeta);
+        }
+      });
+    });
+  });
+</script>
+
